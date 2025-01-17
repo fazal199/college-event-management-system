@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useMutation } from "react-query"
+import { useMutation, useQueryClient } from "react-query"
 import { postData } from "@/lib/react-query/apiFunctions"
 import { successAlert } from "@/lib/sweetalert/alerts"
 import { checkForErrors } from "@/lib/utils"
@@ -33,6 +33,7 @@ export default function SigninPage() {
   })
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { isInterConnected } = useInternet();
 
@@ -43,7 +44,13 @@ export default function SigninPage() {
         title: "Login Successfully!",
         text: "You have successfully LoggedIn!",
       })
-      navigate("/");
+
+      queryClient.invalidateQueries("userData");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000)
+
 
     },
     onError: (error: any) => {
@@ -57,7 +64,7 @@ export default function SigninPage() {
     mutate({
       endpoint: "/api/auth/login",
       payload: values
-    })
+    });
 
   }
 
@@ -112,9 +119,9 @@ export default function SigninPage() {
                   Forgot your password?
                 </Link>
                 <Button type="submit" className="w-full text-lg">
-                 {
-                   !isLoading ? "Login" : "Loading..." 
-                 }
+                  {
+                    !isLoading ? "Login" : "Loading..."
+                  }
                 </Button>
 
               </div>

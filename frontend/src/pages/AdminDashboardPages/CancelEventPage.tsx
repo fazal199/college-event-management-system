@@ -1,6 +1,6 @@
 import { DataTable } from "@/components/shared/DataTable"
 import cancelEventColumns from "./DataTableColumns/cancelEventColumns"
-import { confirmAlert } from "@/lib/sweetalert/alerts"
+import { confirmAlert, successAlert } from "@/lib/sweetalert/alerts"
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { checkForErrors } from "@/lib/utils"
 import { useInternet } from "@/contexts/InterStatusWrapper"
@@ -10,51 +10,38 @@ import { useState } from "react"
 const CancelEventPage = () => {
 
   const { isInterConnected } = useInternet();
+  const queryClient = useQueryClient();
 
 
-  //fetching category data
-  const { data: categoryData } = useQuery({
+  // fetching cancel events data
+  const { data: cancelEventData } = useQuery({
     queryKey: 'cancelevents',
-    queryFn: () => getData({ endpoint: '/api/categories/all' }),
+    queryFn: () => getData({ endpoint: '/api/events/getcanceleventrequests' }),
     onError: (error: any) => {
-      checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while fetching categories data! place:ManageCategoriesPage", error.message);
+      checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while fetching cancel events data! place:CancelEventPage", error.message);
     }
   });
 
-
-  const cancelEventsData: any = [
-    {
-      _id: "e7r39",
-      eventName: "wow",
-      eventLocation: "kjdfiejr",
-      eventDate: "12/54/2004"
-
-    },
-    {
-      _id: "e7r39",
-      eventName: "wow",
-      eventLocation: "kjdfiejr",
-      eventDate: "12/54/2004"
-
-    },
-    {
-      _id: "e7r39",
-      eventName: "wow",
-      eventLocation: "kjdfiejr",
-      eventDate: "12/54/2004"
-
-    },
-    {
-      _id: "e7r39",
-      eventName: "wow",
-      eventLocation: "kjdfiejr",
-      eventDate: "12/54/2004"
-
-    },
-  ]
+    //to cancel the event
+    const { mutate: cancelMutate } = useMutation({
+      mutationFn: putData,
+      onSuccess: () => {
+        successAlert({
+          title: "Event Canceled!",
+          text: "You have successfully Canceled the Event!",
+        })
+        queryClient.invalidateQueries("cancelevents");
+  
+      },
+      onError: (error: any) => {
+        checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while canceling event! place:CancelEventPage", error.message);
+      }
+    })
 
   const cancelEvent = async (id: any) => {
-    console.log(id);
+    cancelMutate({
+      endpoint : `/api/events/cancelevent/${id}`
+    })
 
     return false;
   }
@@ -66,7 +53,7 @@ const CancelEventPage = () => {
   return (
     <div className='pt-10'>
       <h1 className='mb-5 text-4xl font-semibold text-center'>Events Cancel Requests</h1>
-      <DataTable columns={cancelEventColumns} onRowClick="/admin/cancelrequests" isNoDeleteButton={true} permissionAllowedFunction={handleCancelEvent} isSrno={true} data={cancelEventsData} isPermissionActions={true} messageForNoRecord='No Events Found!' />
+      <DataTable columns={cancelEventColumns} onRowClick="/admin/cancelrequests" isNoDeleteButton={true} permissionAllowedFunction={handleCancelEvent} isSrno={true} data={cancelEventData?.data || []} isPermissionActions={true} messageForNoRecord='No Cancel Events Found!' />
     </div>
   )
 }

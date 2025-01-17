@@ -4,31 +4,31 @@ import ColumnDesign from "@/components/shared/ColumnDesign"
 export const cancelEventColumns: any = [
 
     {
-        accessorKey: "eventName",
+        accessorKey: "name",
         //this is header styling 
         header: ({ column }: { column: any }) => <ColumnDesign column={column} title={"Eventname"} />,
         //this is cell
         cell: ({ row }: { row: any }) => {
-            return <div className="text-lg font-medium text-center">{row.getValue("eventName")}</div>
+            return <div className="text-lg font-medium text-center">{row.getValue("name")}</div>
         },
     },
 
     {
-        accessorKey: "eventLocation",
+        accessorKey: "location",
         //this is header styling 
         header: ({ column }: { column: any }) => <ColumnDesign column={column} title={"Location"} />,
         //this is cell
         cell: ({ row }: { row: any }) => {
-            return <div className="text-lg font-medium text-center">{row.getValue("eventLocation")}</div>
+            return <div className="text-lg font-medium text-center">{row.getValue("location")}</div>
         },
     },
     {
-        accessorKey: "eventDate",
+        accessorKey: "date",
         //this is header styling 
         header: ({ column }: { column: any }) => <ColumnDesign column={column} title={"Date"} />,
         //this is cell
         cell: ({ row }: { row: any }) => {
-            return <div className="text-lg font-medium text-center">{row.getValue("eventDate")}</div>
+            return <div className="text-lg font-medium text-center">{row.getValue("date")}</div>
         },
     },
 

@@ -7,31 +7,29 @@ import { useDispatch } from 'react-redux';
 
 const FetchUserData = () => {
 
-    
+
     const dispatch = useDispatch();
     const { isInterConnected } = useInternet();
 
-   useQuery({
+    useQuery({
         queryKey: "userData",
         queryFn: () => getData({ endpoint: "/api/auth/user" }),
         onSuccess: (response) => {
-          
-            
             dispatch(setAuth({ isLogin: true, userData: response.data }));
         },
         onError: (error: any) => {
-           
 
-            checkForErrors(error?.response?.data, isInterConnected, "something went wrong while fetching user data! place:FetchUserData", error.message,false);
+
+            checkForErrors(error?.response?.data, isInterConnected, "something went wrong while fetching user data! place:FetchUserData", error.message, false);
         },
-        //to make api call only one time
+        // to make api call only one time
         // staleTime: Infinity,
         // cacheTime: Infinity,
     },
 
     )
 
-    
+
     return (
         <>
 

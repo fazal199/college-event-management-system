@@ -61,7 +61,7 @@ const OrgRequestsPage = () => {
   return (
     <div className='pt-10'>
       <h1 className='mb-5 text-4xl font-semibold text-center'>Manage New Organisers</h1>
-      <DataTable columns={orgRequestColumns} deleteRecordFunction={handleNotAllowPermissiontoOrg} permissionAllowedFunction={handleAllowPermissiontoOrg} data={!isLoading && orgData.data} onRowClick="/admin/orginfo" isSrno={true} isPermissionActions={true} messageForNoRecord='No Events Found!' />
+      <DataTable columns={orgRequestColumns} deleteRecordFunction={handleNotAllowPermissiontoOrg} permissionAllowedFunction={handleAllowPermissiontoOrg} data={!isLoading && orgData.data} onRowClick="/admin/orginfo" isSrno={true} isPermissionActions={true} messageForNoRecord='No Organiers Requests Found!' />
     </div>
   )
 }

@@ -3,40 +3,45 @@ import Sidebar from '@/components/shared/Sidebar'
 import { useOrganiser } from '@/hooks/auth.hooks'
 import { NavigationLink } from '@/types'
 import { Book, CircleUserRound, SquarePlus } from 'lucide-react'
-import { Outlet } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Navigate, Outlet } from 'react-router-dom'
 
 
 const OrganiserLayout = () => {
 
-  useOrganiser();
-  
-  const sidebarItems:Array<NavigationLink> = [
+  const role = useSelector((state: any) => state.auth?.userData?.data?.role);
+  const isLogin = useSelector((state: any) => state.auth?.isLogin);
 
-     {
-       text : "Your Events",
-       link: "/manage-events/yourevents",
-       icon: <Book />,
-     },
-     {
-       text : "Create Event",
-       link: "/manage-events/createevents",
-       icon: <SquarePlus />
-     },
-     {
-       text : "Profile",
-       link: "/manage-events/profile",
-       icon: <CircleUserRound />
-     },
+  if (role != "organiser" || !isLogin)
+    return <Navigate to="/" replace={true} />
+
+  const sidebarItems: Array<NavigationLink> = [
+
+    {
+      text: "Your Events",
+      link: "/manage-events/yourevents",
+      icon: <Book />,
+    },
+    {
+      text: "Create Event",
+      link: "/manage-events/createevents",
+      icon: <SquarePlus />
+    },
+    {
+      text: "Profile",
+      link: "/manage-events/profile",
+      icon: <CircleUserRound />
+    },
   ]
 
- 
+
 
   return (
 
     <GridMainContent>
-      <Sidebar sidebarItems={sidebarItems}/>
+      <Sidebar sidebarItems={sidebarItems} />
       <div>
-        <Outlet/>
+        <Outlet />
       </div>
     </GridMainContent>
 

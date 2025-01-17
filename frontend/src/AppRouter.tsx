@@ -22,6 +22,7 @@ import OrganiserInfo from "./pages/AdminDashboardPages/OrganiserInfoPage.tsx";
 import AllEventsPage from "./pages/AdminDashboardPages/AllEventsPage.tsx";
 import EventDetailInformationPage from "./pages/AdminDashboardPages/EventMainDetailsPage.tsx";
 import Error500 from "./components/shared/Error500.tsx";
+import EventsPage from "./pages/RootPages/EventsPage.tsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
                 <Route path="" element={<HomePage />} />
                 {/* <Route path="about" element={<About />} /> */}
                 {/* <Route path="contact" element={<About />} /> */}
+                <Route path="events" element={<EventsPage />} />
                 <Route path="manage-events/" element={<OrganiserDashboard />}>
                     <Route path="yourevents" element={<OrgEvents />} />
                     <Route path="profile" element={<OrganiserProfile />} />

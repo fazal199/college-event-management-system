@@ -3,12 +3,17 @@ import Sidebar from '@/components/shared/Sidebar'
 import { useAdmin } from '@/hooks/auth.hooks'
 import { NavigationLink } from '@/types'
 import { BookPlus, CircleUserRound, Languages, SquareArrowOutUpRight, Ban, ChartNoAxesCombined, Book } from 'lucide-react'
-import { Outlet } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Navigate, Outlet } from 'react-router-dom'
 
 const AdminLayout = () => {
 
-    useAdmin();
-    
+    const role = useSelector((state: any) => state.auth?.userData?.data?.role);
+    const isLogin = useSelector((state: any) => state.auth?.isLogin);
+
+    if (role != "admin" || !isLogin)
+        return <Navigate to="/" replace={true} />
+
     const sidebarItems: Array<NavigationLink> = [
         {
             text: "Dashboard",

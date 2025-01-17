@@ -1,79 +1,90 @@
+import { useParams } from "react-router-dom"
+import { useMutation, useQuery, useQueryClient } from "react-query"
+import { checkForErrors } from "@/lib/utils"
+import { useInternet } from "@/contexts/InterStatusWrapper"
+import { getData, putData } from "@/lib/react-query/apiFunctions"
+import { successAlert } from "@/lib/sweetalert/alerts"
+
 
 const EventCancelDetailPage = () => {
+
+  const { eventId } = useParams();
+  
+  const { isInterConnected } = useInternet();
+  
+  // fetching cancel event data
+  const { data: cancelEventData } = useQuery({
+    queryKey: 'canceleventdata',
+    queryFn: () => getData({ endpoint: `/api/events/getcanceleventdata/${eventId}` }),
+    onError: (error: any) => {
+      checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while fetching cancel event data! place:EventCancelDetailPage", error.message);
+    }
+  });
+
+  
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div className="grid grid-cols-1 gap-8">
-      <div className="space-y-8">
-       <div>
-          <h1 className="text-3xl font-bold">Sustainable Fashion Showcase</h1>
-          <p className="mt-2">Organized By Hello wold</p>
-       </div>
-        <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-8">
+        <div className="space-y-8">
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Location</p>
-            <p>San Francisco, CA</p>
+            <h1 className="text-3xl font-bold">{cancelEventData?.data?.name}</h1>
+            <p className="mt-2">Organized By {cancelEventData?.data?.organisername}</p>
           </div>
-         
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Location</p>
+              <p>{cancelEventData?.data?.location}</p>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Category</p>
+              <p>{cancelEventData?.data?.categoryname}</p>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
+              <p>{cancelEventData?.data?.date} (24 Hours)</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Language</p>
+              <p>{cancelEventData?.data?.languagename}</p>
+            </div>
+          </div>
+          <div className=" max-w-none">
+            <h2 className='text-3xl font-semibold mb-4'>Event Cancellation Reason!</h2>
+
+            <p>
+              {cancelEventData?.data?.reason}
+            </p>
+          </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Category</p>
-            <p>Fashion</p>
+            <h2 className='text-3xl font-semibold mb-4'>About the Event</h2>
+            <p>
+              {cancelEventData?.data?.description}
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-y-7 gap-x-4">
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">Address</p>
+            <p>{cancelEventData?.data?.address}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Organizer</p>
-            <p>Eco Fashion Alliance</p>
+            <p className="text-sm font-medium text-muted-foreground">Capacity</p>
+            <p>{cancelEventData?.data?.capacity} people</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Date & Time</p>
-            <p>June 15, 2023 - 9:00 AM to 5:00 PM</p>
+            <p className="text-sm font-medium text-muted-foreground">Ticket Price</p>
+            <p>₹{cancelEventData?.data?.ticketprice}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Language</p>
-            <p>English</p>
+            <p className="text-sm font-medium text-muted-foreground">People Joined</p>
+            <p>{cancelEventData?.data?.totalUsers}</p>
           </div>
-        </div>
-        <div className=" max-w-none">
-          <h2 className='text-3xl font-semibold mb-4'>Event Cancellation Reason!</h2>
-          <p>
-            Join us for a celebration of sustainable fashion at our annual Sustainable Fashion Showcase. Discover the
-            latest eco-friendly designs, learn from industry experts, and connect with like-minded individuals who are
-            passionate about making a positive impact on the environment.
-          </p>
-          <p>
-            This event is organized by the Eco Fashion Alliance, a non-profit dedicated to promoting sustainable
-            practices in the fashion industry. Attendees will have the opportunity to explore a curated selection of
-            sustainable fashion brands, attend educational workshops, and participate in interactive activities.
-          </p>
-        </div>
-        <div>
-          <h2 className='text-3xl font-semibold mb-4'>About the Event</h2>
-          <p>
-            Join us for a celebration of sustainable fashion at our annual Sustainable Fashion Showcase. Discover the
-            latest eco-friendly designs, learn from industry experts, and connect with like-minded individuals who are
-            passionate about making a positive impact on the environment.
-          </p>
-       
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-y-7 gap-x-4">
-        <div>
-          <p className="text-sm font-medium text-muted-foreground">Address</p>
-          <p>123 Main Street, San Francisco, CA 94101</p>
-        </div>
-        <div>
-          <p className="text-sm font-medium text-muted-foreground">Capacity</p>
-          <p>500 people</p>
-        </div>
-        <div>
-          <p className="text-sm font-medium text-muted-foreground">Ticket Price</p>
-          <p>$25</p>
-        </div>
-        <div>
-          <p className="text-sm font-medium text-muted-foreground">People Joined</p>
-          <p>320</p>
         </div>
       </div>
     </div>
-  </div>
   )
 }
 

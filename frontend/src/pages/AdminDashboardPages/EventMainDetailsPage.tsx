@@ -59,7 +59,7 @@ const EventMainDetailsPage = () => {
 
       </div>
       <h1 className='mb-5 mt-16 text-4xl font-semibold text-center'>Registered Users</h1>
-      <DataTable columns={userColumns}  data={eventData?.data?.registeredUsers || []} messageForNoRecord='No Events Found!' />
+      <DataTable columns={userColumns}  data={eventData?.data?.registeredUsers || []} messageForNoRecord='No Users Found!' />
 
     </div>
   )
