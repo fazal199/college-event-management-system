@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 //constants for following controllers
 const options = {
     path: '/',
+    secure: true,
     httpOnly: true, // Cookie is accessible only through HTTP (not JavaScript, e.g.)
 }
 
@@ -48,7 +49,7 @@ const userRegisterController = tryCatchBlock(async (req, res) => {
         .json(
             new ApiResponse(200, null, 'User Created Successfully!', 'Signup Successfully!')
         )
-})
+}, "something went wrong while registering user | users.controller.js -> userRegisterController!")
 
 const userLoginController = tryCatchBlock(async (req, res) => {
 
@@ -70,19 +71,19 @@ const userLoginController = tryCatchBlock(async (req, res) => {
         .json(
             new ApiResponse(200, null, 'User Login Successfully!', 'Login Successfully!')
         )
-})
+}, "something went wrong while logging in user | users.controller.js -> userLoginController!")
 
 const userDataController = tryCatchBlock(async (req, res) => {
 
     const organiserUser = await OrganizerInfomationModel.findOne({ userId: req.user._id }).select("-_id -userId -createdAt -updatedAt");
     res.json(new ApiResponse(200, { data: { username: req.user.username, userpassword: req.user.password, role: req.user.usertype, email: req.user.email, organiserData: organiserUser } }, "User Data Sent Successfully!", null))
 
-})
+}, "something went wrong while fetching user data | users.controller.js -> userDataController!")
 
 const logoutUserController = tryCatchBlock(async (req, res) => {
 
     res.status(200).clearCookie('accessToken', options).json(new ApiResponse(200, null, "User Logged Out!", "User Logged out Successfully!"));
-})
+}, "something went wrong while logging out user | users.controller.js -> logoutUserController!")
 
 const organiserUpdateController = tryCatchBlock(async (req, res) => {
     const { organiserName, organiserPhone, organiserUpiId } = req.body;
@@ -103,7 +104,7 @@ const organiserUpdateController = tryCatchBlock(async (req, res) => {
 
     // Return the updated organiser info in the response
     res.json(new ApiResponse(200, updatedOrganiser, "Organiser Information Successfully Updated!", "Your Information Successfully Updated!"));
-});
+}, "something went wrong while updating organiser information | users.controller.js -> organiserUpdateController!")
 
 
 const organisersRequestsController = tryCatchBlock(async (req, res) => {
@@ -143,7 +144,7 @@ const organisersRequestsController = tryCatchBlock(async (req, res) => {
 
     res.json(new ApiResponse(200, orgRequestsData, "Organiser Requests Data Sent Successfully!", "Fetched Organisers Pending Requests!"))
 
-})
+}, "something went wrong while fetching organiser requests | users.controller.js -> organisersRequestsController!")
 
 
 const organisersRequestsPermissionController = tryCatchBlock(async (req, res) => {
@@ -168,7 +169,7 @@ const organisersRequestsPermissionController = tryCatchBlock(async (req, res) =>
 
     res.status(200).json(new ApiResponse(200, [], "Organiser Permssion Updated!", permission ? "Organiser Request Accepted!" : "Organiser Request Rejected!"))
 
-})
+}, "something went wrong while updating organiser permission | users.controller.js -> organisersRequestsPermissionController!")
 
 const getAllUsersandOrganisersController = tryCatchBlock(async (req, res) => {
 
@@ -257,7 +258,7 @@ const getAllUsersandOrganisersController = tryCatchBlock(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, { usersData: allUsersData, organisersData: allOrganisersData }, "User and Organiser Data Sent!"))
 
-})
+}, "something went wrong while fetching all users and organisers | users.controller.js -> getAllUsersandOrganisersController!")
 
 const organiserTakeorGivePermissionController = tryCatchBlock(async (req, res) => {
 
@@ -280,19 +281,21 @@ const organiserTakeorGivePermissionController = tryCatchBlock(async (req, res) =
 
     res.status(200).json(new ApiResponse(200, [], `Organiser Permission update and set to ${permission} !`))
 
-})
+}, "something went wrong while updating organiser permission status | users.controller.js -> organiserTakeorGivePermissionController!")
 
 const getOrgainserDataController = tryCatchBlock(async (req, res) => {
 
     const { userId } = req.params;
 
     const userData = await UsersModel.findById(userId);
+
+    const orgData = await OrganizerInfomationModel.findOne({ userId }, { userId: 0, activityStatus: 0, createdAt: 0, isPermissionAccepted: 0 })
+
+
     
-    const orgData = await OrganizerInfomationModel.findOne({ userId },{userId:0,activityStatus:0,createdAt:0,isPermissionAccepted:0})
+    res.status(200).json(new ApiResponse(200, { name: orgData.organisername, username: userData.username, email: userData.email, phoneno: orgData.phoneno, upiId: orgData.upiId}, `Organiser Data Sent!`))
 
-    res.status(200).json(new ApiResponse(200, {name : orgData.organisername,username : userData.username,email: userData.email,phoneno:orgData.phoneno,upiId: orgData.upiId}, `Organiser Data Sent!`))
-
-})
+}, "something went wrong while fetching organiser data | users.controller.js -> getOrgainserDataController!")
 
 
 

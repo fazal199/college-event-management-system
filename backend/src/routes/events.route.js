@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const { authMiddleware } = require("../middlewares/auth.middleware");
 const { createEventController, getOnlyEventDataController,getAllCancelEventRequestController,
-    getCancelEventDataController, deleteEventController,cancelEventController, cancelRequestEventController, updateEventController, getAllEventsController, getRecentEventsController, getEventInsideDetailController } = require("../controllers/events.controller");
+    getCancelEventDataController, deleteEventController,cancelEventController, cancelRequestEventController, updateEventController, getAllEventsController, getRecentEventsController, getEventInsideDetailController, 
+    DashboardController} = require("../controllers/events.controller");
 const upload = require("../middlewares/multer.middleware");
 
 const eventsRouter = Router();
@@ -15,9 +16,9 @@ eventsRouter.route("/geteventdata/:eventId").get(authMiddleware, getOnlyEventDat
 eventsRouter.route("/canceleventrequest").put(authMiddleware, cancelRequestEventController);
 eventsRouter.route("/delete/:eventId").delete(authMiddleware, deleteEventController);
 eventsRouter.route("/getcanceleventrequests").get(authMiddleware, getAllCancelEventRequestController);
-eventsRouter.route("/getcanceleventdata/:eventId").get(authMiddleware, getCancelEventDataController);
-eventsRouter.route("/cancelevent").put(authMiddleware, cancelEventController);
-
+eventsRouter.route("/getcanceleventdata/:cancelEventId").get(authMiddleware, getCancelEventDataController);
+eventsRouter.route("/cancelevent/:cancelEventId").put(authMiddleware, cancelEventController);
+eventsRouter.route("/dashboard").get(authMiddleware, DashboardController);
 
 
 module.exports = eventsRouter;

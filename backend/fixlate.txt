@@ -1,6 +1,6 @@
-event table me se time field hatade
+
 trycatchblock me place name add kar 
 session of user ko aage badha, like jab user ka data send karta hai to new accesstoken set karde
-FetchUserData ki api bas ek baar call hoti hai, chahe kitna he login logout karo, fix it. normal api call karle bhai
+
 deployment changes:
 1.app.js me origin change kar dena

@@ -8,6 +8,9 @@ const mongoose = require('mongoose');
 const JoinUsersModel = require('../models/joinsusers.model.js');
 const TransactionModel = require('../models/transactions.model.js');
 const CancelEventModel = require('../models/cancelevents.model.js');
+const UsersModel = require('../models/users.model.js');
+const { fillMissingDates } = require('../lib/utils/utilityfunctions.js');
+const { refundPayment } = require("../lib/utils/utilityfunctions.js");
 
 const createEventController = tryCatchBlock(async (req, res) => {
     const {
@@ -60,8 +63,7 @@ const createEventController = tryCatchBlock(async (req, res) => {
     });
 
     res.json(new ApiResponse(200, [], "Organiser Event Created!", "Event Created Successfully!"));
-
-})
+}, "something went wrong while creating event | events.controller.js -> createEventController!")
 
 const updateEventController = tryCatchBlock(async (req, res) => {
     const { eventId } = req.params;
@@ -116,8 +118,7 @@ const updateEventController = tryCatchBlock(async (req, res) => {
     });
 
     res.json(new ApiResponse(200, [], "Organiser Event Updated!", "Event Information Updated Successfully!"));
-
-})
+}, "something went wrong while updating event | events.controller.js -> updateEventController!")
 
 const getAllEventsController = tryCatchBlock(async (req, res) => {
     const allRecentEvents = await EventModel.aggregate(
@@ -166,7 +167,7 @@ const getAllEventsController = tryCatchBlock(async (req, res) => {
         ]
     )
     res.json(new ApiResponse(200, allRecentEvents, "All Recent Event Data Sent!", "All Recent Events Fetched Successfully!"));
-})
+}, "something went wrong while fetching all events | events.controller.js -> getAllEventsController!")
 
 const getEventInsideDetailController = tryCatchBlock(async (req, res) => {
 
@@ -257,7 +258,7 @@ const getEventInsideDetailController = tryCatchBlock(async (req, res) => {
     ]);
 
     res.status(200).json(new ApiResponse(200, { organiserName: orgData.organisername, capacity: eventData[0].capacity, eventName: eventData[0].name, status: eventData[0].status, totalRupees, totalUsers, registeredUsers }, "EventInside Data Sent!", "Event Inside Fetched Successfully!"));
-})
+}, "something went wrong while fetching event details | events.controller.js -> getEventInsideDetailController!")
 
 const getRecentEventsController = tryCatchBlock(async (req, res) => {
     const allRecentEvents = await EventModel.aggregate(
@@ -311,7 +312,7 @@ const getRecentEventsController = tryCatchBlock(async (req, res) => {
         ]
     )
     res.status(200).json(new ApiResponse(200, allRecentEvents, "Organiser Recent Event Data Sent!", "Organiser Recent Events Fetched Successfully!"));
-})
+}, "something went wrong while fetching recent events | events.controller.js -> getRecentEventsController!")
 
 const getOnlyEventDataController = tryCatchBlock(async (req, res) => {
 
@@ -320,7 +321,7 @@ const getOnlyEventDataController = tryCatchBlock(async (req, res) => {
     const eventsData = await EventModel.findById(eventId);
 
     res.status(200).json(new ApiResponse(200, eventsData, "Event Data Sent!", "Event Data Fetched Successfully!"));
-});
+}, "something went wrong while fetching single event data | events.controller.js -> getOnlyEventDataController!")
 
 const cancelRequestEventController = tryCatchBlock(async (req, res) => {
     const { eventId, reason } = req.body;
@@ -332,24 +333,29 @@ const cancelRequestEventController = tryCatchBlock(async (req, res) => {
     })
 
     res.status(200).json(new ApiResponse(200, [], "Cancel Event Request Created!", "Cancel Event Request Sent to Admin!"));
-
-})
+}, "something went wrong while creating cancel event request | events.controller.js -> cancelRequestEventController!")
 
 const deleteEventController = tryCatchBlock(async (req, res) => {
 
     let { eventId } = req.params;
     eventId = new mongoose.Types.ObjectId(eventId)
 
-
     await EventModel.findByIdAndDelete(eventId);
     await JoinUsersModel.deleteMany({ eventId })
     await TransactionModel.deleteMany({ eventId })
     res.status(200).json(new ApiResponse(200, [], "Organiser Event Deleted!", "Event Deleted Successfully!"));
 
-})
+}, "something went wrong while deleting event | events.controller.js -> deleteEventController!")
 
 const getAllCancelEventRequestController = tryCatchBlock(async (req, res) => {
-    const cancelEventsData = await EventModel.aggregate([
+
+    const cancelEventsData = await CancelEventModel.aggregate([
+        {
+            $match: {
+                isCanceled: false
+            }
+
+        },
         {
             $lookup: {
                 from: "events",
@@ -371,23 +377,262 @@ const getAllCancelEventRequestController = tryCatchBlock(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, cancelEventsData, "Cancel Events Data Sent!", "Cancel Events Data Fetched Successfully!"));
 
-});
+}, "something went wrong while fetching all cancel event requests | events.controller.js -> getAllCancelEventRequestController!")
 
 const getCancelEventDataController = tryCatchBlock(async (req, res) => {
-    //eventname,location,date
-});
+
+    const { cancelEventId } = req.params;
+
+    const cancelEventData = await CancelEventModel.findById(cancelEventId);
+
+    const data = await CancelEventModel.aggregate([
+        {
+            $match: {
+                eventId: new mongoose.Types.ObjectId(cancelEventData.eventId)
+            }
+        },
+        {
+            $lookup: {
+                from: "events",
+                localField: "eventId",
+                foreignField: "_id",
+                as: "eventData"
+            }
+        },
+        {
+            $lookup: {
+                from: "organizerinformations",
+                localField: "organiserId",
+                foreignField: "userId",
+                as: "organiserData"
+            }
+        },
+        {
+            $lookup: {
+                from: "joinusers",
+                localField: "eventId",
+                foreignField: "eventId",
+                as: "joinusersData"
+            }
+        },
+
+
+        {
+            $addFields: {
+                categoryId: { $first: "$eventData.categoryId" }
+            }
+        },
+        {
+            $addFields: {
+                languageId: { $first: "$eventData.languageId" }
+            }
+        },
+        {
+            $lookup: {
+                from: "categories",
+                localField: "categoryId",
+                foreignField: "_id",
+                as: "categoryData"
+            }
+        },
+        {
+            $lookup: {
+                from: "languages",
+                localField: "languageId",
+                foreignField: "_id",
+                as: "languageData"
+            }
+        },
+
+        {
+            $project: {
+                organisername: { $first: "$organiserData.organisername" },
+                location: { $first: "$eventData.location" },
+                language: { $first: "$eventData.language" },
+                languagename: { $first: "$languageData.languagename" },
+                categoryname: { $first: "$categoryData.categoryname" },
+                address: { $first: "$eventData.address" },
+                name: { $first: "$eventData.name" },
+                capacity: { $first: "$eventData.capacity" },
+                ticketprice: { $first: "$eventData.ticketprice" },
+                description: { $first: "$eventData.description" },
+                totalUsers: { $size: "$joinusersData" },
+                reason: 1,
+
+                date: {
+                    $dateToString: {
+                        format: "%B %d, %Y - %H:%M",
+                        date: { $first: "$eventData.date" }
+                    }
+                }
+            }
+        }
+    ]
+    )
+
+    res.status(200).json(new ApiResponse(200, data[0] || [], "Cancel Event Data Sent!", "Cancel Event Data Fetched Successfully!"));
+
+}, "something went wrong while fetching cancel event data | events.controller.js -> getCancelEventDataController!")
 
 const cancelEventController = tryCatchBlock(async (req, res) => {
-//1.joins evnets,orgainserinformations, joinusers
-//2.count the no. of users
-//3.date format thing
-//4.projection the fields
-});
+
+    const { cancelEventId } = req.params;
+
+    const cancelEventData = await CancelEventModel.findById(cancelEventId)
+    let response;
+
+    const paymentIdsAndAmount = await TransactionModel.find({
+        eventId: new mongoose.Types.ObjectId(cancelEventData.eventId)
+    }, { paymentId: 1, amount: 1 });
+
+    if (paymentIdsAndAmount) {
+        const refundPromises = paymentIdsAndAmount.map((payment) => refundPayment(payment.paymentId, payment.amount))
+
+        response = await Promise.all(refundPromises);
+    }
+
+
+    await EventModel.findOneAndUpdate({ eventId: cancelEventData.eventId }, {
+        status: "canceled",
+    })
+
+
+    await CancelEventModel.findByIdAndUpdate(cancelEventId, {
+        isCanceled: true
+    })
+
+    res.status(200).json(new ApiResponse(200, [], "Event Successfully Canceled!", "The Event has been Canceled!"));
+
+}, "something went wrong while canceling event | events.controller.js -> cancelEventController!")
+
+
+const DashboardController = tryCatchBlock(async (req, res) => {
+    const totalUsers = await UsersModel.aggregate([
+        {
+            $group: {
+                _id: null,
+                totalUsers: {
+                    $sum: 1,
+                }
+
+            }
+        }
+    ])
+
+    const totalOrganisers = await OrganizerInfomationModel.aggregate([
+        {
+            $group: {
+                _id: null,
+                totalOrganisers: {
+                    $sum: 1,
+                }
+
+            }
+        }
+    ])
+
+    const totalUpcomingEventRupees = await EventModel.aggregate([
+        {
+            $lookup: {
+                from: "transactions",
+                localField: "_id",
+                foreignField: "eventId",
+                as: "eventData"
+            }
+        },
+        {
+            $addFields: {
+                ticketPrice: {
+                    $first: "$eventData.ticketprice"
+                }
+            }
+        },
+        {
+            $match: {
+                status: "upcoming"
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalRupees: {
+                    $sum: "$ticketPrice"
+                }
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+            }
+        }
+    ]);
 
 
 
+    const ArrayofTotalUsersLast7Days = await UsersModel.aggregate([
+        {
+            $match: {
+                roleId: new mongoose.Types.ObjectId('66e98878d3520766f537a52a'),
+                createdAt: {
+                    $gt: new Date(new Date().setDate(new Date().getDate() - 7))
+                }
+
+            }
+        },
+        {
+
+            $group: {
+                _id: {
+                    $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+                },
+                count: { $sum: 1 }
+            }
+        },
+        {
+            $sort: {
+                "createdAt": 1
+            }
+        }
+
+    ])
+
+    let totalUsersLast7Days = fillMissingDates(ArrayofTotalUsersLast7Days);
 
 
+    const ArrayofTotalOrganisersLast7Days = await UsersModel.aggregate([
+        {
+            $match: {
+                roleId: new mongoose.Types.ObjectId('66e988b6d3520766f537a52b'),
+                createdAt: {
+                    $gt: new Date(new Date().setDate(new Date().getDate() - 7))
+                }
+            }
+        },
+        {
+            // Group by the day and count the registrations
+            $group: {
+                _id: {
+                    $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+                },
+                count: { $sum: 1 } // Count the number of users per day
+            }
+        },
+        {
+            $sort: {
+                "createdAt": 1
+            }
+        }
+
+    ]);
+
+    let totalOrganisersLast7Days = fillMissingDates(ArrayofTotalOrganisersLast7Days);
+
+
+    res.status(200).json(new ApiResponse(200, {
+        totalUsers: totalUsers[0]?.totalUsers || 0, totalOrganisers: totalOrganisers[0]?.totalOrganisers || 0, totalRupees: totalUpcomingEventRupees[0]?.totalRupees || 0, totalUsersLast7Days,
+        totalOrganisersLast7Days
+    }));
+}, "something went wrong while fetching dashboard data | events.controller.js -> DashboardController!")
 
 module.exports = {
     createEventController,
@@ -400,5 +645,6 @@ module.exports = {
     deleteEventController,
     getAllCancelEventRequestController,
     getCancelEventDataController,
-    cancelEventController
+    cancelEventController,
+    DashboardController
 }
