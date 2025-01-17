@@ -1,16 +1,1 @@
-hey gpt, I am currently creating an online event management system where there are mainly 3 roles.
-1.users
-users can register in different types of events and see in which
-event they have registered.
 
-2.organiser 
-organisers can register and can create, update and delete the events also organiser can see how many users have registered. they can see all the events they have created.
-the organiser can also update their information on their profile page.
-the event organised by the organiser can be paid or free.
-
-3.admin  
-the admin can see the dashboard which shows how many users and organisers have registered. how events are going to happen.
-admin can see the all basic information of users and organisers. admin can see all the detail  information of events that have registered on the web app. 
-when a new organiser registered, they can't directly create events. when they register an request is sent to admin. and then admin can decide whether to accept the request or not. admin can also stop the organiser or organization to create the events.
-if a organiser delete a upcoming event so a request is sent to admin and admin can decide whether to cancel the app or not. if admin allowed the event to be cancelled so all the users who have registered for the events will get their money back with the reason of cancellaton of the event.
-admin can manage the categories and languages for events.
