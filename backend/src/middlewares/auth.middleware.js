@@ -8,8 +8,11 @@ const mongoose = require("mongoose");
 
 const authMiddleware = tryCatchBlock(async (req, res, next) => {
 
+
+    
     const token = req?.cookies?.accessToken || req.headers?.authorization?.replace("Bearer", "").trim();
 
+    
     //if token is not given then send error
     if (!token)
         throw new ApiError(401, "Unauthorized request!");
@@ -24,7 +27,7 @@ const authMiddleware = tryCatchBlock(async (req, res, next) => {
             throw new ApiError(401,"Jwt Token has Expired!",{isTokenExpired: true},"Your Session has Expired! Plzz Login again!")
         }
     }
-
+   
     //finding the user through the id which was sent in the token
     const user = await UsersModel.aggregate([
         {
@@ -60,7 +63,10 @@ const authMiddleware = tryCatchBlock(async (req, res, next) => {
         throw new ApiError(401, "Invalid token Access!");
 
     //perform join here to get the user role
+    // console.log(user);
+    
     req.user = user[0];
+    
     next();
 
 })

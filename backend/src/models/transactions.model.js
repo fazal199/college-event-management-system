@@ -4,14 +4,13 @@ const TransactionSchema = new mongoose.Schema({
   eventId: { type: mongoose.Schema.Types.ObjectId, ref: 'Event', required: true },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   ticketprice: { type: Number, required: true },
-  organizerId: { type: mongoose.Schema.Types.ObjectId, ref: 'OrganizerInfo', required: true },
   amount: {
     type: Number,
     required: true,
     trim: true,
 
   },
-  paymentId: {
+  razorPayPaymentId: {
     type: String,
     required: true,
     trim: true,
@@ -21,7 +20,11 @@ const TransactionSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-
+  },
+  razorpayOrderId: {
+    type: String,
+    required: true,
+    trim: true,
   },
 }, { timestamps: true });
 

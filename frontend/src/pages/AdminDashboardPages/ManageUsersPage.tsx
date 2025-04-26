@@ -72,7 +72,6 @@ const ManageUsersPage = () => {
           <DataTable columns={userColumns} isSrno={true} data={allUsersData?.data?.usersData || []} messageForNoRecord='No Users Found!' />
         </TabsContent>
         <TabsContent value="orgainsers">
-
           <h1 className='mb-5 mt-16 text-4xl font-semibold text-center'>Registered Organisers</h1>
           <DataTable isSrno={true} changeActivityFunc={changePermission} isActivityAllowed={true} onRowClick="/admin/orginfo" columns={registeredOrganisersColumns} data={allUsersData?.data?.organisersData || []} isActions={false} messageForNoRecord='No Organisers Found!' />
         </TabsContent>

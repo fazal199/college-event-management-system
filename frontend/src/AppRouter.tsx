@@ -23,15 +23,25 @@ import AllEventsPage from "./pages/AdminDashboardPages/AllEventsPage.tsx";
 import EventDetailInformationPage from "./pages/AdminDashboardPages/EventMainDetailsPage.tsx";
 import Error500 from "./components/shared/Error500.tsx";
 import EventsPage from "./pages/RootPages/EventsPage.tsx";
+import EventDetailsPage from "./pages/RootPages/EventDetailsPage.tsx";
+import UserEventsPage from "./pages/UserPages/UserEventsPage.tsx";
+import JoinEventDetailPage from "./pages/UserPages/JoinEventDetailPage.tsx";
+import EventTicketPage from "./pages/UserPages/EventTicketPage.tsx";
+import AboutPage from "./pages/RootPages/AboutPage.tsx";
+
+
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
             <Route path="/" element={<RootLayout />}>
                 <Route path="" element={<HomePage />} />
-                {/* <Route path="about" element={<About />} /> */}
-                {/* <Route path="contact" element={<About />} /> */}
+                <Route path="about" element={<AboutPage />} />
                 <Route path="events" element={<EventsPage />} />
+                <Route path="myevents" element={<UserEventsPage />} />
+                <Route path="myevents/event/:eventId" element={<JoinEventDetailPage />} />
+                <Route path="events/event/:eventId" element={<EventDetailsPage />} />
+
                 <Route path="manage-events/" element={<OrganiserDashboard />}>
                     <Route path="yourevents" element={<OrgEvents />} />
                     <Route path="profile" element={<OrganiserProfile />} />
@@ -51,13 +61,14 @@ const router = createBrowserRouter(
                     <Route path="languages" element={<ManageLanguagesPages />} />
                 </Route>
             </Route>
+            <Route path="event/ticket/:eventId" element={<EventTicketPage />} />
 
             <Route path="/auth/" element={<AuthLayout />}>
                 <Route path="signin" element={<SigninPage />} />
                 <Route path="signup" element={<SignupPage />} />
             </Route>
 
-            <Route path="servererror" element={<Error500 />} />
+            <Route path="500" element={<Error500 />} />
             <Route path="*" element={<NotFound />} />
         </>
     )

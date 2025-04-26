@@ -40,7 +40,7 @@ interface DataTableProps<TData, TValue> {
   editRecord?: (edit: any) => void,
   isPermissionActions?: boolean,
   isNoEditButton?: boolean,
-  permissionAllowedFunction?: (id: any) => void,
+  permissionAllowedFunction?: (id: any,secondId:any) => void,
   isActivityAllowed?: boolean,
   changeActivityFunc?: (status: boolean, id: any) => void,
   isNoDeleteButton? : boolean
@@ -68,6 +68,7 @@ export function DataTable({
   const [sorting, setSorting] = useState<SortingState>([]);
   const navigate = useNavigate();
 
+
   const table = useReactTable({
     data,
     columns,
@@ -91,13 +92,12 @@ export function DataTable({
             .includes(filterValue.toLowerCase())
         );
 
-
     },
   });
 
 
   return (
-    <div className="max-w-6xl pb-12 mx-auto">
+    <div className="max-w-6xl pb-12 mx-auto px-8">
       <div className="flex items-center py-4">
         <label htmlFor="search" className="mr-2 font-semibold">Search:</label>
         <Input
@@ -161,11 +161,11 @@ export function DataTable({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {isSrno && <TableCell onClick={() => navigate(onRowClick ? `${onRowClick as string}/${row.original?._id}` : '')} className="flex items-center justify-center gap-6 py-3 text-lg font-medium text-center">
+                  {isSrno && <TableCell onClick={() => navigate(onRowClick ? `${onRowClick as string}/${row.original?.eventId || row.original?._id}` : '')} className="flex items-center justify-center gap-6 py-3 text-lg font-medium text-center">
                     {index + 1}
                   </TableCell>}
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell onClick={() => navigate(onRowClick ? `${onRowClick as string}/${row.original?._id}` : '')} key={cell.id} className="py-3">
+                    <TableCell onClick={() => navigate(onRowClick ? `${onRowClick as string}/${row.original?.eventId || row.original?._id}` : '')} key={cell.id} className="py-3">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -173,7 +173,7 @@ export function DataTable({
                   {isActions && <TableCell className="flex items-center justify-center gap-6 py-3 text-lg font-medium text-center">
                     {!isNoEditButton && <Pencil onClick={() => {
                       if (!editRecord)
-                        navigate(`${onRowClick}/${row.original._id}`);
+                        navigate(`${onRowClick}/${row.original?.eventId || row.original._id}`);
 
                       else
                         editRecord(row.original._id)
@@ -195,10 +195,14 @@ export function DataTable({
                   {isPermissionActions && <TableCell className="flex items-center justify-center gap-6 py-3 text-lg font-medium text-center">
 
                     <CircleCheckBig onClick={() => {
+                      
                       if (!permissionAllowedFunction)
                         return;
 
-                      permissionAllowedFunction(row.original?._id);
+                      console.log(row.original);
+
+
+                      permissionAllowedFunction(row.original?._id,row.original?.eventId || null);
                     }} color="#04ff00" className="cursor-pointer active:bg-primary" />
                     {!isNoDeleteButton && <Trash2 onClick={() => {
                       if (!deleteRecordFunction)

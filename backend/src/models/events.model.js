@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const mongooseAggregatePaginate = require('mongoose-aggregate-paginate-v2');
 const EventSchema = new mongoose.Schema({
   name: { type: String, required: true },
   eventThumbnail: { type: String, required: true },
@@ -16,6 +16,8 @@ const EventSchema = new mongoose.Schema({
   organiserId: { type: mongoose.Schema.Types.ObjectId, ref: 'OrganizerInfo', required: true },
   status: { type: String, required: true }
 },{timestamps: true});
+
+EventSchema.plugin(mongooseAggregatePaginate)
 
 const EventModel = mongoose.model('Event', EventSchema);
 module.exports = EventModel;

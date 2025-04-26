@@ -7,5 +7,6 @@ const CancelEventSchema = new mongoose.Schema({
   organiserId: { type: mongoose.Schema.Types.ObjectId, ref: 'OrganizerInfo', required: true }
 },{timestamps: true});
 
+
 const CancelEventModel = mongoose.model('CancelEvent', CancelEventSchema);
 module.exports = CancelEventModel

@@ -37,11 +37,7 @@ export default function Header() {
       link: "/about",
 
     },
-    {
-      text: "Contact",
-      link: "/contact",
-
-    },
+  
     {
       text: "Manage Events",
       link: "/manage-events/profile",
@@ -49,6 +45,10 @@ export default function Header() {
     {
       text: "Admin",
       link: "/admin/dashboard",
+    },
+    {
+      text: "Your Events",
+      link: "/myevents",
     },
 
   ]
@@ -81,23 +81,37 @@ export default function Header() {
           <ul className="flex items-center gap-8 text-lg font-semibold text-secondary-foreground">
             {navMenus.map((item: NavigationLink) => {
 
-              if (!isLogin && (item.text === "Manage Events" || item.text === "Admin")) {
+
+              //Your Events
+              if (!isLogin && (item.text === "Manage Events" || item.text === "Admin" || item.text == "Your Events")) {
                 // If nobody is logged in, don't show "Manage Events" or "Admin"
+
                 return;
               }
-              else if (isLogin && role === "user" && (item.text === "Manage Events" || item.text === "Admin")) {
+           
+
+              else if ((isLogin && role === "user") && (item.text === "Manage Events" || item.text === "Admin")) {
                 // If a regular user is logged in, don't show "Manage Events" or "Admin"
-                return;
-              }
-              else if (isLogin && role === "organiser" && item.text === "Admin") {
-                // If an organiser is logged in, don't show "Admin"
-                return;
-              }
-              else if (isLogin && role === "admin" && item.text === "Manage Events") {
-                // If an admin is logged in, don't show "Manage Events"
+               
+
                 return;
               }
 
+           
+              else if ((isLogin && role === "organiser") && (item.text === "Admin" || item.text === "Your Events")) {
+                // If an organiser is logged in, don't show "Admin" and "Your Events"
+               
+                return;
+              }
+
+              
+              else if ((isLogin && role === "admin") && (item.text === "Manage Events" || item.text === "Your Events")) {
+                // If an admin is logged in, don't show "Manage Events" and "Your Events"
+               
+                return;
+              }
+
+              
               return (
                 <li key={item.link}>
                   <NavLink to={item.link} className={({ isActive }) => `transition-colors ${isActive && 'text-primary underline decoration-primary underline-offset-4 decoration-2'} hover:text-primary`} >

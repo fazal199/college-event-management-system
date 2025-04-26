@@ -5,7 +5,6 @@ import { checkForErrors } from '@/lib/utils';
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { useInternet } from "@/contexts/InterStatusWrapper"
 import { deleteData, getData, putData } from "@/lib/react-query/apiFunctions"
-import { useState } from 'react';
 
 const OrgEventsPage = () => {
 
@@ -21,7 +20,7 @@ const OrgEventsPage = () => {
         }
     })
 
-    //to make admin request for event cancellation
+    //to make request for event cancellation to admin
     const { mutate, isLoading: requestLoading } = useMutation({
         mutationFn: putData,
         onError: (error: any) => {
@@ -36,7 +35,6 @@ const OrgEventsPage = () => {
             queryClient.invalidateQueries("allrecenteventsorganiser");
         },
         onError: (error: any) => {
-            
             checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while deleting event! place:OrgEventsPage", error.message);
         }
     })
@@ -63,7 +61,7 @@ const OrgEventsPage = () => {
         if (status == "upcoming")
             editAlert({
                 title: "Do you really want to Cancel Event?",
-                text: "You Have to Provide a Reason, so that Admin can Decision",
+                text: "You Have to Provide a Reason, so that Admin can make Decision!",
                 inputType: "text",
                 inputPlaceholder: "Write Your Reason Here!",
                 confirmButtonText: "Yes, Cancel It!",

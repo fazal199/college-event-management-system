@@ -115,9 +115,7 @@ export default function SigninPage() {
                   ))
                 }
 
-                <Link to="#" className="ml-auto inline-block text-sm underline">
-                  Forgot your password?
-                </Link>
+              
                 <Button type="submit" className="w-full text-lg">
                   {
                     !isLoading ? "Login" : "Loading..."

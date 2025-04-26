@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 //constants for following controllers
 const options = {
     path: '/',
+    expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
     secure: true,
     httpOnly: true, // Cookie is accessible only through HTTP (not JavaScript, e.g.)
 }
@@ -292,8 +293,8 @@ const getOrgainserDataController = tryCatchBlock(async (req, res) => {
     const orgData = await OrganizerInfomationModel.findOne({ userId }, { userId: 0, activityStatus: 0, createdAt: 0, isPermissionAccepted: 0 })
 
 
-    
-    res.status(200).json(new ApiResponse(200, { name: orgData.organisername, username: userData.username, email: userData.email, phoneno: orgData.phoneno, upiId: orgData.upiId}, `Organiser Data Sent!`))
+
+    res.status(200).json(new ApiResponse(200, { name: orgData.organisername, username: userData.username, email: userData.email, phoneno: orgData.phoneno, upiId: orgData.upiId }, `Organiser Data Sent!`))
 
 }, "something went wrong while fetching organiser data | users.controller.js -> getOrgainserDataController!")
 

@@ -8,10 +8,10 @@ type SidebarProps = {
 
 const Sidebar = ({ sidebarItems = [] }: SidebarProps) => {
     return (
-        <aside className="flex-col hidden pt-8 border-2 shadow-md min-h-[83vh] shadow-secondary border-primary sm:flex">
+        <aside className="flex-col hidden pt-8 border-r-2 shadow-md min-h-[83vh]  shadow-foreground/15 border-secondary sm:flex">
 
-            <nav>
-                {sidebarItems.map((item: NavigationLink) => (
+            <nav className='flex flex-col gap-5 w-11/12 mx-auto font-semibold'>
+             {sidebarItems.map((item: NavigationLink) => (
                     <NavLink
                         key={item.link}
                         to={item.link}

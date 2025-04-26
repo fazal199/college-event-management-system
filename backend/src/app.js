@@ -34,6 +34,4 @@ app.use("/api/events", eventsRouter);
 app.use("/api/categories", categoriesRouter);
 app.use("/api/languages", languagesRouter);
 
-
-
 module.exports = app;

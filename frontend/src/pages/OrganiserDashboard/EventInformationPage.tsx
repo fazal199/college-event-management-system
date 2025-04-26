@@ -42,7 +42,7 @@ const EventInformationPage = () => {
                             </div>
                             <div className="text-xl font-semibold">
                                 <div>Total Users</div>
-                                <div className='mt-1'>{eventData?.data?.capacity || 0}/{eventData?.data?.totalUsers || 0}</div>
+                                <div className='mt-1'>{eventData?.data?.totalUsers || 0}/{eventData?.data?.capacity || 0}</div>
                             </div>
                         </div>
                         <div className='border-2 flex gap-3 item-center rounded-lg py-4 px-4 border-solid border-primary'>

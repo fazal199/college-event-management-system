@@ -37,6 +37,10 @@ export function checkForErrors(
 }
 
 export function formatDate(dateString: string) {
+
+  if(!dateString)
+    return "";
+  
   const date = new Date(dateString);
   return date.toISOString().slice(0, 16);
 }

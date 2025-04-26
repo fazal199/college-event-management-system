@@ -22,32 +22,34 @@ const CancelEventPage = () => {
     }
   });
 
-    //to cancel the event
-    const { mutate: cancelMutate } = useMutation({
-      mutationFn: putData,
-      onSuccess: () => {
-        successAlert({
-          title: "Event Canceled!",
-          text: "You have successfully Canceled the Event!",
-        })
-        queryClient.invalidateQueries("cancelevents");
-  
-      },
-      onError: (error: any) => {
-        checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while canceling event! place:CancelEventPage", error.message);
-      }
-    })
+  //to cancel the event
+  const { mutate: cancelMutate } = useMutation({
+    mutationFn: deleteData,
+    onSuccess: () => {
+      successAlert({
+        title: "Event Canceled!",
+        text: "You have successfully Canceled the Event!",
+      })
+      queryClient.invalidateQueries("cancelevents");
 
-  const cancelEvent = async (id: any) => {
+    },
+    onError: (error: any) => {
+      checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while canceling event! place:CancelEventPage", error.message);
+    }
+  })
+
+  const cancelEvent = async (eventId:any) => {
+    console.log(eventId);
+    
     cancelMutate({
-      endpoint : `/api/events/cancelevent/${id}`
+      endpoint: `/api/events/delete/${eventId}`
     })
 
     return false;
   }
 
-  const handleCancelEvent = (id: any) => {
-    confirmAlert({ confirmFunction: cancelEvent, qtitle: "Are You Sure?", qtext: "Do you really want to cancel the Event?", qconfirmtext: "Yes, Cancel it!", stitle: "Event has been Canceled!", stext: "Event Cancellation Successful!", id })
+  const handleCancelEvent = (id: any,eventId:any) => {
+    confirmAlert({ confirmFunction: cancelEvent, qtitle: "Are You Sure?", qtext: "Do you really want to cancel the Event?", qconfirmtext: "Yes, Cancel it!", stitle: "Event has been Canceled!", stext: "Event Cancellation Successful!", id:eventId })
   }
 
   return (

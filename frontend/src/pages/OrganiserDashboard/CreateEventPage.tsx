@@ -357,7 +357,7 @@ export default function CreateEventPage() {
 
                                 </div>
                                 {preview && <figure>
-                                    <img src={preview} alt="" />
+                                    <img loading="lazy" src={preview} alt="" />
                                 </figure>}
                             </div>
 

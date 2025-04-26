@@ -38,7 +38,7 @@ const EventMainDetailsPage = () => {
           </div>
           <div className="text-xl font-semibold">
             <div>Total Users</div>
-            <div className='mt-1'>{eventData?.data?.capacity || 0}/{eventData?.data?.totalUsers || 0}</div>
+            <div className='mt-1'>{eventData?.data?.totalUsers || 0}/{eventData?.data?.capacity || 0}</div>
           </div>
 
           <CardFooter>
