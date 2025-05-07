@@ -4,8 +4,7 @@ import { confirmAlert, successAlert } from "@/lib/sweetalert/alerts"
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { checkForErrors } from "@/lib/utils"
 import { useInternet } from "@/contexts/InterStatusWrapper"
-import { deleteData, getData, postData, putData } from "@/lib/react-query/apiFunctions"
-import { useState } from "react"
+import {  getData, putData } from "@/lib/react-query/apiFunctions"
 
 const CancelEventPage = () => {
 

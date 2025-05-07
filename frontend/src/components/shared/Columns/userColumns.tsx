@@ -1,7 +1,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import ColumnDesign from "../ColumnDesign"
-import { EventRegisteredUser, OrgEventsData } from "@/types"
+import { EventRegisteredUser } from "@/types"
 
 export const userColumns: ColumnDef<EventRegisteredUser>[] = [
     {

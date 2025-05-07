@@ -5,17 +5,15 @@ import FilterSidebar from "./FilterSidebar"
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { checkForErrors } from "@/lib/utils"
-import { useQuery, useQueryClient } from "react-query"
+import { useQuery } from "react-query"
 import { useInternet } from "@/contexts/InterStatusWrapper"
 import { getData } from "@/lib/react-query/apiFunctions"
-import { log } from "console"
 import { useEffect, useState } from "react"
 import { useDebounceCallback } from "usehooks-ts"
 

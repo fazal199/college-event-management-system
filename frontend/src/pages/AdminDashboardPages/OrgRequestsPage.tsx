@@ -2,7 +2,7 @@ import { DataTable } from "@/components/shared/DataTable";
 import { confirmAlert } from "@/lib/sweetalert/alerts";
 import { orgRequestColumns } from "./DataTableColumns/orgRequestColumns";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getData, postData, putData } from "@/lib/react-query/apiFunctions";
+import { getData, putData } from "@/lib/react-query/apiFunctions";
 import { useInternet } from "@/contexts/InterStatusWrapper";
 import { checkForErrors } from "@/lib/utils";
 

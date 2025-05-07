@@ -9,8 +9,9 @@ const categoriesRouter = require("./routes/categories.route.js");
 const { languagesRouter } = require("./routes/languages.route.js");
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: `${process.env.FRONTEND_URL}`,
     "methods": "GET,PUT,PATCH,POST,DELETE",
+    //to allow the server to set and receive cookies in the browser (for authentication)
     credentials: true,
 }))
 
@@ -29,6 +30,10 @@ app.use(cookieParser());
 
 
 //routes imports
+app.get("/",(req,res) => {
+    res.send("hello from event management server!");
+})
+
 app.use("/api/auth", usersRouter);
 app.use("/api/events", eventsRouter);
 app.use("/api/categories", categoriesRouter);

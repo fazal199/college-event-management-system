@@ -33,10 +33,9 @@ const DashboardPage = () => {
     }
   });
 
-  console.log(dashboardData?.data);
   
 
-  const state = {
+  const state:any = {
 
     series: [{
       name: 'Users',

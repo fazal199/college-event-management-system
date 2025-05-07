@@ -4,7 +4,7 @@ import { DataTable } from "@/components/shared/DataTable"
 import { orgRequestColumns as registeredOrganisersColumns } from "./DataTableColumns/orgRequestColumns"
 import { confirmAlert, successAlert } from "@/lib/sweetalert/alerts"
 import { useMutation, useQuery, useQueryClient } from "react-query"
-import { deleteData, getData, postData, putData } from "@/lib/react-query/apiFunctions"
+import {  getData, putData } from "@/lib/react-query/apiFunctions"
 import { checkForErrors } from "@/lib/utils"
 import { useInternet } from "@/contexts/InterStatusWrapper"
 

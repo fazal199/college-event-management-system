@@ -1,5 +1,4 @@
 import { CaretSortIcon } from "@radix-ui/react-icons"
-import exp from "constants"
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react"
 
 const ColumnDesign = ({ column, title }: { column: any, title: any }) => {

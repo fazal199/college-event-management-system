@@ -82,7 +82,7 @@ const OrganiserProfilePage = () => {
   };
 
   // Reusable function to render form fields
-  const renderFormField = (name: string, label: string) => (
+  const renderFormField = (name: any, label: string) => (
     <FormField
       key={name}
       control={form.control}

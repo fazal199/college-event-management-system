@@ -1,6 +1,5 @@
 import GridMainContent from '@/components/shared/GridMainContent'
 import Sidebar from '@/components/shared/Sidebar'
-import { useAdmin } from '@/hooks/auth.hooks'
 import { NavigationLink } from '@/types'
 import { BookPlus, CircleUserRound, Languages, SquareArrowOutUpRight, Ban, ChartNoAxesCombined, Book } from 'lucide-react'
 import { useSelector } from 'react-redux'

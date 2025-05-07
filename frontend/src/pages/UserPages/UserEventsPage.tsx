@@ -3,7 +3,6 @@ import { DataTable } from '@/components/shared/DataTable'
 import { useInternet } from '@/contexts/InterStatusWrapper'
 import { getData } from '@/lib/react-query/apiFunctions'
 import { checkForErrors } from '@/lib/utils'
-import React from 'react'
 import { useQuery } from 'react-query'
 
 

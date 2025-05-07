@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
 const ROLESID = {
-    USERID: new mongoose.Types.ObjectId('676d4b05ae7b9099698e8d32'),
-    ORGANISERID: new mongoose.Types.ObjectId('676d4b15ae7b9099698e8d33')
+    USERID: new mongoose.Types.ObjectId(`${process.env.USERID}`),
+    ORGANISERID: new mongoose.Types.ObjectId(`${process.env.ORGANISERID}`),
 };
 
 const JWTCONSTANTS = {
-    SECRETKEY: 'secretkey',
-    EXPIRESDAY: '10d'
+    SECRETKEY: `${process.env.JWT_SECRET}`,
+    EXPIRESDAY: `${process.env.JWT_EXPIRES}`
 }
 
 module.exports = {

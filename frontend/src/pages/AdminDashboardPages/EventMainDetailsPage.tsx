@@ -1,6 +1,5 @@
 import { DataTable } from '@/components/shared/DataTable'
 
-import { EventRegisteredUser } from '@/types'
 import { CardFooter } from '@/components/ui/card'
 import { HandCoins, User } from 'lucide-react'
 import { userColumns } from '../../components/shared/Columns/userColumns'

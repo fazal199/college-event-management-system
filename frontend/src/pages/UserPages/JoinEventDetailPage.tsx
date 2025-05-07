@@ -2,13 +2,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useInternet } from '@/contexts/InterStatusWrapper';
-import { getData, postData, putData } from '@/lib/react-query/apiFunctions';
-import { confirmAlert, successAlert, warningAlert } from '@/lib/sweetalert/alerts';
+import { getData, putData } from '@/lib/react-query/apiFunctions';
+import { successAlert } from '@/lib/sweetalert/alerts';
 import { checkForErrors } from '@/lib/utils';
-import axios from 'axios';
-import { log } from 'console';
-import { AlignVerticalJustifyStart, Building, CalendarDays, Clock, MapPin, Ticket, Users, Users2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import {  Building, CalendarDays, Clock, MapPin, Ticket, Users, Users2 } from 'lucide-react';
+import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -42,7 +40,7 @@ const JoinEventDetailPage = () => {
     //react query code to handle cancel user registration 
     const { mutate: mutateCancelRegistration, isLoading: iscancelUserRegistrationLoading } = useMutation({
         mutationFn: putData,
-        onSuccess: (response: any) => {
+        onSuccess: () => {
             successAlert({ title: "Event Successfully Canceled!", text: eventData?.data?.isFree ? "Your Registration has been canceled!" : "Your Registration has been canceled. Your Money Has Been Refunded!" });
             queryClient.invalidateQueries("eventdata");
 

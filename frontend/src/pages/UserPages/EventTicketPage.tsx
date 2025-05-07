@@ -14,7 +14,7 @@ const EventTicketPage = () => {
   
 
      //react query code to get the ticket data
-     const { data: ticketData, isLoading } = useQuery({
+     const { data: ticketData } = useQuery({
       queryKey: ['ticketdata'],
       queryFn: () => getData({ endpoint: `/api/events/event/ticket/${eventId}` }),
       onError: (error: any) => {

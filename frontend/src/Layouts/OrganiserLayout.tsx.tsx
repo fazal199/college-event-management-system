@@ -1,6 +1,5 @@
 import GridMainContent from '@/components/shared/GridMainContent'
 import Sidebar from '@/components/shared/Sidebar'
-import { useOrganiser } from '@/hooks/auth.hooks'
 import { NavigationLink } from '@/types'
 import { Book, CircleUserRound, SquarePlus } from 'lucide-react'
 import { useSelector } from 'react-redux'

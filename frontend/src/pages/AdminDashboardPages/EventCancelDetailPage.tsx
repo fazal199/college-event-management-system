@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom"
-import { useMutation, useQuery, useQueryClient } from "react-query"
+import { useQuery } from "react-query"
 import { checkForErrors } from "@/lib/utils"
 import { useInternet } from "@/contexts/InterStatusWrapper"
-import { getData, putData } from "@/lib/react-query/apiFunctions"
-import { successAlert } from "@/lib/sweetalert/alerts"
+import { getData } from "@/lib/react-query/apiFunctions"
 
 
 const EventCancelDetailPage = () => {
