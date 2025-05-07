@@ -12,7 +12,6 @@ const authMiddleware = tryCatchBlock(async (req, res, next) => {
     
     const token = req?.cookies?.accessToken || req.headers?.authorization?.replace("Bearer", "").trim();
 
-    console.log(token);
     
     //if token is not given then send error
     if (!token)
@@ -22,7 +21,6 @@ const authMiddleware = tryCatchBlock(async (req, res, next) => {
 
     //verifying token
     try {
-        console.log(JWTCONSTANTS.SECRETKEY);
         
         decodedToken = jwt.verify(token, JWTCONSTANTS.SECRETKEY);
         
