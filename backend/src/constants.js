@@ -6,7 +6,6 @@ const ROLESID = {
     ORGANISERID: new mongoose.Types.ObjectId('676d4b15ae7b9099698e8d33')
 };
 
-
 const JWTCONSTANTS = {
     SECRETKEY: 'secretkey',
     EXPIRESDAY: '10d'

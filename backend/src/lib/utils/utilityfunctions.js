@@ -3,7 +3,7 @@ const razorpay = require("../razorpay/index");
 // Function to fill missing dates with 0
 const fillMissingDates = (data) => {
   const last7Days = [];
-  for (let i = 6; i >= 0; i--) { // Exclude today
+  for (let i = 6; i >=0;  i--) { // Exclude today
     const date = new Date();
     date.setDate(date.getDate() - i);
     const formattedDate = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD

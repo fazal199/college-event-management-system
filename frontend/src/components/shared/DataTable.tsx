@@ -184,7 +184,7 @@ export function DataTable({
 
                       //passing status based on editbutton true or false
                       else if (isNoEditButton)
-                        deleteRecordFunction(row.original._id,row.original.status);
+                        deleteRecordFunction(row.original._id,{status:row.original.status,isFree:row.original.isFree});
                         
                       else
                       deleteRecordFunction(row.original._id);

@@ -33,7 +33,7 @@ const DashboardPage = () => {
     }
   });
 
-  console.log(dashboardData?.data?.totalUsersLast7Days);
+  console.log(dashboardData?.data);
   
 
   const state = {
@@ -81,7 +81,7 @@ const DashboardPage = () => {
           </div>
           <div className="text-xl font-semibold">
             <div>Total Users</div>
-            <div className='mt-1'>{dashboardData?.data?.totalUsers | 0}</div>
+            <div className='mt-1'>{dashboardData?.data?.totalUsers || 0}</div>
           </div>
 
         </div>
@@ -91,7 +91,7 @@ const DashboardPage = () => {
           </div>
           <div className="text-xl font-semibold">
             <div>Total Organisers</div>
-            <div className='mt-1'>{dashboardData?.data?.totalOrganisers | 0}</div>
+            <div className='mt-1'>{dashboardData?.data?.totalOrganisers || 0}</div>
           </div>
         </div>
         <div className='border-2 flex gap-3 item-center rounded-lg py-4 px-4 border-solid border-primary'>
@@ -101,7 +101,7 @@ const DashboardPage = () => {
           <div className="text-xl font-semibold">
             <div>Total Rupees</div>
             <div className='text-xs'>(upcoming events)</div>
-            <div className='mt-1'>{dashboardData?.data?.totalRupees | 0}₹</div>
+            <div className='mt-1'>{dashboardData?.data?.totalRupees || 0}₹</div>
           </div>
         </div>
 

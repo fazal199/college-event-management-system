@@ -24,7 +24,7 @@ const CancelEventPage = () => {
 
   //to cancel the event
   const { mutate: cancelMutate } = useMutation({
-    mutationFn: deleteData,
+    mutationFn: putData,
     onSuccess: () => {
       successAlert({
         title: "Event Canceled!",
@@ -39,10 +39,9 @@ const CancelEventPage = () => {
   })
 
   const cancelEvent = async (eventId:any) => {
-    console.log(eventId);
-    
+   
     cancelMutate({
-      endpoint: `/api/events/delete/${eventId}`
+      endpoint: `/api/events/cancel/${eventId}`,
     })
 
     return false;

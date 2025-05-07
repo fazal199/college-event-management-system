@@ -1,10 +1,11 @@
 import { DataTable } from '@/components/shared/DataTable'
 import { columns } from '../../components/shared/Columns/eventColumns'
-import { confirmAlert, editAlert, successAlert } from '@/lib/sweetalert/alerts'
+import { confirmAlert, editAlert, warningAlert } from '@/lib/sweetalert/alerts'
 import { checkForErrors } from '@/lib/utils';
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { useInternet } from "@/contexts/InterStatusWrapper"
 import { deleteData, getData, putData } from "@/lib/react-query/apiFunctions"
+import { title } from 'process';
 
 const OrgEventsPage = () => {
 
@@ -21,44 +22,60 @@ const OrgEventsPage = () => {
     })
 
     //to make request for event cancellation to admin
-    const { mutate, isLoading: requestLoading } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: putData,
         onError: (error: any) => {
-            checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while creating cancel evnet request! place:OrgEventsPage", error.message);
+            checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while creating cancel event request! place:OrgEventsPage", error.message);
         }
     })
-
-    //to delete event
-    const { mutate:deleteMutate, isLoading: deleteLoading } = useMutation({
-        mutationFn: deleteData,
-        onSuccess : () => {
-            queryClient.invalidateQueries("allrecenteventsorganiser");
-        },
-        onError: (error: any) => {
-            checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while deleting event! place:OrgEventsPage", error.message);
-        }
-    })
-
-    const handleDeleteEvent = async (id: any) => {
-        deleteMutate({
-            endpoint : `/api/events/delete/${id}`
-        })
-        return false;
-    }
 
     const handleRequestFunction = async (id: any, reason: any) => {
         mutate({
             endpoint: "/api/events/canceleventrequest",
-            payload : {
-                eventId : id,
-                reason 
+            payload: {
+                eventId: id,
+                reason
             }
         })
         return false;
     }
 
-    const deleteEvent = async (id: any, status: any) => {
-        if (status == "upcoming")
+    //to cancel event directly
+    const { mutate: cancelMutate } = useMutation({
+        mutationFn: putData,
+        onSuccess: () => {
+            queryClient.invalidateQueries("allrecenteventsfororganiser");
+        },
+        onError: (error: any) => {
+            checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while cancelling event! place:OrgEventsPage", error.message);
+        }
+    })
+
+    const handleCancelEvent = async (id: any) => {
+        cancelMutate({
+            endpoint: `/api/events/cancel/${id}`,
+        })
+        return false;
+    }
+
+  
+
+    const deleteEvent = async (id: any, { status, isFree }: any) => {
+
+        //if the event is completed, then just saying no to organiser
+        if (status == "completed") {
+            warningAlert({ title: "Oops!", text: "The Event Has Been Completed and You can't Cancel it!" })
+        }
+
+        //if event is upcoming and free, so the organiser can directly delete it!
+        else if (status == "upcoming" && isFree)
+            confirmAlert({
+                confirmFunction: handleCancelEvent, qtitle: "Are you Sure?", qtext: "Do you really want to Cancel the Event?", iconType: "warning", qconfirmtext: "Yes!", id, stitle: "Event Canceled!", stext: "You Event has been canceled successfully!"
+            })
+
+
+            //now if the event is paid and status is upcoming
+        else {
             editAlert({
                 title: "Do you really want to Cancel Event?",
                 text: "You Have to Provide a Reason, so that Admin can make Decision!",
@@ -70,11 +87,6 @@ const OrgEventsPage = () => {
                 stitle: "Request Sent Successfully!",
                 stext: "An Request has been sent to Admin, Plzz wait We will contact you soon!",
 
-            })
-
-        else {
-            confirmAlert({
-                confirmFunction: handleDeleteEvent, qtitle: "Are you Sure?", qtext: "Do you really want to Delete the Event?", iconType: "warning", qconfirmtext: "Yes!", id, stitle: "Event Deleted!", stext: "Event Information has been Deleted!"
             })
         }
     }

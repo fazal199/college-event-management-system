@@ -12,6 +12,7 @@ interface confirmAlertType {
   iconType?: SweetAlertIcon;
   id?: any;
   data?: any;
+  eventId?: any;
 }
 interface successAlertType {
   title: string;

@@ -19,11 +19,13 @@ import { successAlert } from "@/lib/sweetalert/alerts"
 import { checkForErrors } from "@/lib/utils"
 import { onlyUpdateOrganiserData } from '@/lib/redux/slices/authSlice'
 import { useInternet } from '@/contexts/InterStatusWrapper'
+import { useState } from 'react'
 
 
 const OrganiserProfilePage = () => {
   const dispatch = useDispatch();
   const { isInterConnected } = useInternet();
+  const [walletbalance, setWalletbalance] = useState<number>(0);
 
   const form = useForm({
     resolver: zodResolver(organiserProfileSchema),
@@ -39,7 +41,12 @@ const OrganiserProfilePage = () => {
     queryKey: 'organiserData',
     queryFn: () => getData({ endpoint: '/api/auth/user' }),
     onSuccess: (response) => {
-      const { organisername, phoneno, upiId } = response.data?.data?.organiserData;
+      
+      const { organisername, phoneno, upiId, walletbalance
+      } = response.data?.data?.organiserData;
+
+      setWalletbalance(walletbalance);
+
       form.reset({
         organiserName: organisername,
         organiserPhone: phoneno,
@@ -92,41 +99,54 @@ const OrganiserProfilePage = () => {
     />
   );
 
-  console.log(organiserData);
 
   return (
     <div>
       <h1 className='my-6 text-4xl font-semibold text-center'>Hello, {organiserData?.data?.data?.username}👋</h1>
-      <Card className="h-auto max-w-sm px-4 mx-auto shadow-xl my-7">
-        <CardHeader>
-          <CardTitle className="block mt-2 text-2xl text-center">Your Profile</CardTitle>
-          <CardDescription className="block !mt-4 text-center">
-            Update Your Data Here.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="mt-4">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onOrganiserProfileSubmit)}>
-              <div className="grid gap-4 space-y-2">
 
-                {isFetching ? (
-                  <p>Loading...</p> // Add a loading state while fetching the data
-                ) : (
-                  <>
-                    {renderFormField('organiserName', 'Organiser Name')}
-                    {renderFormField('organiserPhone', 'Organiser Phone no.')}
-                    {renderFormField('organiserUpiId', 'Organiser UpiId')}
+      <div className=' grid grid-cols-[minmax(20rem,0.7fr)_auto]'>
+        <div>
+          <Card className="h-auto max-w-md mx-auto px-4  shadow-xl my-7">
+            <CardHeader>
+              <CardTitle className="block mt-2 text-2xl text-center">Your Profile</CardTitle>
+              <CardDescription className="block !mt-4 text-center">
+                Update Your Data Here.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="mt-4">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onOrganiserProfileSubmit)}>
+                  <div className="grid gap-4 space-y-2">
 
-                    <Button type="submit" className="w-full text-lg">
-                      {isSubmitting ? "Loading..." : "Update"}
-                    </Button>
-                  </>
-                )}
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+                    {isFetching ? (
+                      <p>Loading...</p> // Add a loading state while fetching the data
+                    ) : (
+                      <>
+                        {renderFormField('organiserName', 'Organiser Name')}
+                        {renderFormField('organiserPhone', 'Organiser Phone no.')}
+                        {renderFormField('organiserUpiId', 'Organiser UpiId')}
+
+                        <Button type="submit" className="w-full text-lg">
+                          {isSubmitting ? "Loading..." : "Update"}
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+        <div>
+          <div>
+            <div className='font-bold text-2xl mt-8'>Your Wallet Balace:</div>
+            <div className='font-bold text-2xl mt-5'>{walletbalance}₹</div>
+            <Button className="w-full text-lg max-w-[14rem] mt-4 ">
+              Withdraw
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

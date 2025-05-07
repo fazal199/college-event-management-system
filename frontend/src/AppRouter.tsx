@@ -1,7 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
 import HomePage from "./pages/RootPages/HomePage.tsx";
 import RootLayout from "./Layouts/RootLayout";
-import AuthLayout from "./Layouts/AuthLayout";
 import SigninPage from "./pages/AuthPages/SigninPage.tsx";
 import SignupPage from "./pages/AuthPages/SignupPage.tsx";
 import NotFound from "./components/shared/NotFound.tsx"
@@ -41,6 +40,8 @@ const router = createBrowserRouter(
                 <Route path="myevents" element={<UserEventsPage />} />
                 <Route path="myevents/event/:eventId" element={<JoinEventDetailPage />} />
                 <Route path="events/event/:eventId" element={<EventDetailsPage />} />
+                <Route path="auth/signin" element={<SigninPage />} />
+                <Route path="auth/signup" element={<SignupPage />} />
 
                 <Route path="manage-events/" element={<OrganiserDashboard />}>
                     <Route path="yourevents" element={<OrgEvents />} />
@@ -59,14 +60,11 @@ const router = createBrowserRouter(
                     <Route path="cancelrequests/:eventId" element={< EventCancelDetailPage />} />
                     <Route path="categories" element={<MangeCategoriesPage />} />
                     <Route path="languages" element={<ManageLanguagesPages />} />
+
                 </Route>
             </Route>
             <Route path="event/ticket/:eventId" element={<EventTicketPage />} />
 
-            <Route path="/auth/" element={<AuthLayout />}>
-                <Route path="signin" element={<SigninPage />} />
-                <Route path="signup" element={<SignupPage />} />
-            </Route>
 
             <Route path="500" element={<Error500 />} />
             <Route path="*" element={<NotFound />} />

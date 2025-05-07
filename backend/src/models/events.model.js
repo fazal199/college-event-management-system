@@ -11,10 +11,12 @@ const EventSchema = new mongoose.Schema({
   capacity: { type: Number, required: true },
   ticketprice: { type: Number, required: true },
   isFree: { type: Boolean, default: false },
+  isMoneyTransferedtoWallet: { type: Boolean, default: false },
   categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
   languageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Language', required: true },
   organiserId: { type: mongoose.Schema.Types.ObjectId, ref: 'OrganizerInfo', required: true },
   status: { type: String, required: true }
+  //upcoming, completed, canceled
 },{timestamps: true});
 
 EventSchema.plugin(mongooseAggregatePaginate)

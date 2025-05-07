@@ -147,6 +147,7 @@ const getAllEventsController = tryCatchBlock(async (req, res) => {
                     },
                     location: 1,
                     createdAt: 1,
+                    status: 1
                 }
             },
             {
@@ -154,23 +155,7 @@ const getAllEventsController = tryCatchBlock(async (req, res) => {
                     createdAt: -1,
                 }
             },
-            {
-                $addFields: {
-                    status: {
-                        $cond: [
-                            { $gt: ["$date", "$currentDate"] }, // Check if eventDate is greater than current date (upcoming)
-                            "upcoming",
-                            {
-                                $cond: [
-                                    { $lt: ["$eventDate", "$currentDate"] }, // Check if eventDate is less than current date (expired)
-                                    "expired",
-                                    "ongoing" // If neither condition is true, it is ongoing
-                                ]
-                            }
-                        ]
-                    }
-                }
-            },
+           
         ]
     )
     res.json(new ApiResponse(200, allRecentEvents, "All Recent Event Data Sent!", "All Recent Events Fetched Successfully!"));
@@ -193,26 +178,12 @@ const getEventInsideDetailController = tryCatchBlock(async (req, res) => {
                 },
                 capacity: 1,
                 name: 1,
-                organiserId: 1
+                organiserId: 1,
+                status: 1,
+                isMoneyTransferedtoWallet: 1,
+                
             }
         },
-        {
-            $addFields: {
-                status: {
-                    $cond: [
-                        { $gt: ["$date", "$currentDate"] }, // Check if eventDate is greater than current date (upcoming)
-                        "upcoming",
-                        {
-                            $cond: [
-                                { $lt: ["$eventDate", "$currentDate"] }, // Check if eventDate is less than current date (expired)
-                                "expired",
-                                "ongoing" // If neither condition is true, it is ongoing
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
     ])
     const totalUsers = await JoinUsersModel.find({ eventId }).countDocuments();
     const orgData = await OrganizerInfomationModel.findOne({ userId: eventData[0].organiserId }, { organisername: 1 });
@@ -235,7 +206,6 @@ const getEventInsideDetailController = tryCatchBlock(async (req, res) => {
     const totalRupees = totalRupeesDocument[0]?.totalRupees || 0;
 
     const registeredUsers = await JoinUsersModel.aggregate([
-
         {
             $match: {
                 eventId: new mongoose.Types.ObjectId(eventId)
@@ -264,7 +234,7 @@ const getEventInsideDetailController = tryCatchBlock(async (req, res) => {
         }
     ]);
 
-    res.status(200).json(new ApiResponse(200, { organiserName: orgData.organisername, capacity: eventData[0].capacity, eventName: eventData[0].name, status: eventData[0].status, totalRupees, totalUsers, registeredUsers }, "EventInside Data Sent!", "Event Inside Fetched Successfully!"));
+    res.status(200).json(new ApiResponse(200, { organiserName: orgData.organisername,organiserId:eventData[0].organiserId, capacity: eventData[0].capacity, eventName: eventData[0].name, date:eventData[0].date,status:eventData[0].status, totalRupees, totalUsers, registeredUsers,isMoneyTransferedtoWallet: eventData[0].isMoneyTransferedtoWallet }, "EventInside Data Sent!", "Event Inside Fetched Successfully!"));
 }, "something went wrong while fetching event details | events.controller.js -> getEventInsideDetailController!")
 
 const getRecentEventsController = tryCatchBlock(async (req, res) => {
@@ -292,6 +262,8 @@ const getRecentEventsController = tryCatchBlock(async (req, res) => {
                     },
                     location: 1,
                     createdAt: 1,
+                    status: 1,
+                    isFree: 1
                 }
             },
             {
@@ -299,23 +271,7 @@ const getRecentEventsController = tryCatchBlock(async (req, res) => {
                     createdAt: -1,
                 }
             },
-            {
-                $addFields: {
-                    status: {
-                        $cond: [
-                            { $gt: ["$date", "$currentDate"] }, // Check if eventDate is greater than current date (upcoming)
-                            "upcoming",
-                            {
-                                $cond: [
-                                    { $lt: ["$eventDate", "$currentDate"] }, // Check if eventDate is less than current date (expired)
-                                    "expired",
-                                    "ongoing" // If neither condition is true, it is ongoing
-                                ]
-                            }
-                        ]
-                    }
-                }
-            },
+           
         ]
     )
     res.status(200).json(new ApiResponse(200, allRecentEvents, "Organiser Recent Event Data Sent!", "Organiser Recent Events Fetched Successfully!"));
@@ -330,6 +286,60 @@ const getOnlyEventDataController = tryCatchBlock(async (req, res) => {
     res.status(200).json(new ApiResponse(200, eventsData, "Event Data Sent!", "Event Data Fetched Successfully!"));
 }, "something went wrong while fetching single event data | events.controller.js -> getOnlyEventDataController!")
 
+const markEventasCompletedController = tryCatchBlock(async (req, res) => {
+
+    const { eventId } = req.params;
+    
+    await EventModel.findByIdAndUpdate(eventId,{
+        status: "completed"
+    });
+
+    res.status(200).json(new ApiResponse(200, [], "Event Status updated to Completed!", "Event Status Updated to Completed Successfully!"));
+}, "something went wrong while updating event status to completed! | events.controller.js -> markEventasCompletedController!")
+const moveMoneytoOrganiserWalletController = tryCatchBlock(async (req, res) => {
+
+    const { eventId,organiserId } = req.body;
+
+    
+    
+    const event = await EventModel.findById(eventId);
+
+    console.log(event);
+    
+    if(event.isMoneyTransferedtoWallet)
+        throw new ApiError(401,"Organiser Has Already Transfered the Money to Wallet!", "You Have Already Transfered the Money of This Event to Your Wallet!");
+
+    const totalRupeesDocument = await TransactionModel.aggregate([
+        {
+            $match: {
+                eventId: new mongoose.Types.ObjectId(eventId)
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalRupees: {
+                    $sum: "$ticketprice"
+                }
+            }
+        }
+    ])
+
+    const totalRupees = totalRupeesDocument[0]?.totalRupees || 0;
+
+    console.log(totalRupees);
+    console.log(typeof totalRupees);
+    
+    await OrganizerInfomationModel.updateOne({userId: new mongoose.Types.ObjectId(organiserId)}, {
+        $inc: {walletbalance: totalRupees}
+    })
+
+    event.isMoneyTransferedtoWallet = true;
+    event.save();
+    
+    res.status(200).json(new ApiResponse(200, [], "Event Money Transfered to Orgainser Wallet!", "Your Event Money has transfered to your wallet Successfully!"));
+}, "something went wrong while transferring orgainser event money to wallet! | events.controller.js -> moveMoneytoOrganiserWalletController!")
+
 const cancelRequestEventController = tryCatchBlock(async (req, res) => {
     const { eventId, reason } = req.body;
 
@@ -342,13 +352,12 @@ const cancelRequestEventController = tryCatchBlock(async (req, res) => {
     res.status(200).json(new ApiResponse(200, [], "Cancel Event Request Created!", "Cancel Event Request Sent to Admin!"));
 }, "something went wrong while creating cancel event request | events.controller.js -> cancelRequestEventController!")
 
-const deleteEventController = tryCatchBlock(async (req, res) => {
+const cancelEventController = tryCatchBlock(async (req, res) => {
 
     let { eventId } = req.params;
+   
     eventId = new mongoose.Types.ObjectId(eventId)
-
-    console.log(eventId);
-
+    
     const event = await EventModel.aggregate([
         {
             $match: {
@@ -375,12 +384,12 @@ const deleteEventController = tryCatchBlock(async (req, res) => {
         throw new ApiError(404, "Event not found");
     }
 
-    // Check if the event is paid and upcoming and has joined users
-    if (!event[0].isFree && event[0].totalJoinedUsers > 0 && event[0].status != "upcoming") {
+    // Check if the event is paid has joined users
+    if (!event[0].isFree && event[0].totalJoinedUsers > 0) {
 
         const transactions = await TransactionModel.find({
             eventId
-        }, { paymentId: 1, amount: 1 });
+        }, { razorPayPaymentId: 1, amount: 1 });
 
         //refunding all payments
         const refundAllPaymentPromises = transactions.map((transaction) => refundPayment(transaction.razorPayPaymentId, transaction.amount))
@@ -388,15 +397,24 @@ const deleteEventController = tryCatchBlock(async (req, res) => {
         await Promise.all(refundAllPaymentPromises);
     }
 
-    // Clean up related data
-    await TransactionModel.deleteMany({ eventId });
-    await JoinUsersModel.deleteMany({ eventId });
-    await EventModel.findByIdAndDelete(eventId);
-    await CancelEventModel.findOneAndDelete({ eventId })
+    //mark the status is canceled
+    await EventModel.findByIdAndUpdate(eventId,{
+        status: "canceled"
+    })
 
-    res.status(200).json(new ApiResponse(200, [], "Organiser Event Deleted!", "Event Deleted Successfully!"));
+   //if the event is paid, we just create entries of the paid events in the cancelevents table or collection
+    if(!event[0].isFree)
+        await CancelEventModel.updateOne({
+        eventId : new mongoose.Types.ObjectId(eventId),
+    },{
+        $set: {
+            isCanceled: true
+        }
+    })
 
-}, "something went wrong while deleting event by admin | events.controller.js -> deleteEventController!")
+    res.status(200).json(new ApiResponse(200, [], "Organiser Event Canceled!", "Event Canceled Successfully!"));
+
+}, "something went wrong while cancelling event! | events.controller.js -> cancelEventController!")
 
 const getAllCancelEventRequestController = tryCatchBlock(async (req, res) => {
 
@@ -597,7 +615,7 @@ const DashboardController = tryCatchBlock(async (req, res) => {
     const ArrayofTotalUsersLast7Days = await UsersModel.aggregate([
         {
             $match: {
-                roleId: new mongoose.Types.ObjectId('66e98878d3520766f537a52a'),
+                roleId: new mongoose.Types.ObjectId('676d4b05ae7b9099698e8d32'),
                 createdAt: {
                     $gt: new Date(new Date().setDate(new Date().getDate() - 7))
                 }
@@ -621,13 +639,14 @@ const DashboardController = tryCatchBlock(async (req, res) => {
 
     ])
 
+    console.log(ArrayofTotalUsersLast7Days);
+    
     let totalUsersLast7Days = fillMissingDates(ArrayofTotalUsersLast7Days);
-
 
     const ArrayofTotalOrganisersLast7Days = await UsersModel.aggregate([
         {
             $match: {
-                roleId: new mongoose.Types.ObjectId('66e988b6d3520766f537a52b'),
+                roleId: new mongoose.Types.ObjectId('676d4b15ae7b9099698e8d33'),
                 createdAt: {
                     $gt: new Date(new Date().setDate(new Date().getDate() - 7))
                 }
@@ -640,11 +659,6 @@ const DashboardController = tryCatchBlock(async (req, res) => {
                     $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
                 },
                 count: { $sum: 1 } // Count the number of users per day
-            }
-        },
-        {
-            $sort: {
-                "createdAt": 1
             }
         }
 
@@ -722,6 +736,11 @@ const getAllEventsForUsersController = tryCatchBlock(async (req, res) => {
                     {
                         ticketprice: {
                             $lte: req.query.ticketprice ? req.query.ticketprice == '0' ? Infinity : Number.parseFloat(req.query.ticketprice) : Infinity
+                        }
+                    },
+                    {
+                        status : {
+                            $ne : "canceled"
                         }
                     }
                 ]
@@ -888,7 +907,8 @@ const getUserJoinedEventsController = tryCatchBlock(async (req, res) => {
                         format: "%Y-%m-%d",
                         date: { $first: "$eventData.date" }
                     }
-                }
+                },
+                status: {$first : "$eventData.status"},
             }
         },
         {
@@ -947,7 +967,7 @@ const createOrderIdforEventPaymentController = tryCatchBlock(async (req, res) =>
     ));
 }, "something went wrong while generating orderId for the payment of the event | events.controller.js -> createOrderIdforEventPaymentController!")
 
-//
+
 const paymentVerificationforEventController = tryCatchBlock(async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, eventId, amount, ticketprice } = req.body;
 
@@ -1095,13 +1115,14 @@ const cancelUserRegistrationController = tryCatchBlock(async (req, res) => {
 module.exports = {
     getAllEventsForUsersController,
     createEventController,
+    moveMoneytoOrganiserWalletController,
     updateEventController,
     getAllEventsController,
     getEventInsideDetailController,
     getRecentEventsController,
     getOnlyEventDataController,
     cancelRequestEventController,
-    deleteEventController,
+    cancelEventController,
     getAllCancelEventRequestController,
     getCancelEventDataController,
     DashboardController,
@@ -1111,5 +1132,6 @@ module.exports = {
     createOrderIdforEventPaymentController,
     paymentVerificationforEventController,
     getTicketInfoController,
-    cancelUserRegistrationController
+    cancelUserRegistrationController,
+    markEventasCompletedController
 }

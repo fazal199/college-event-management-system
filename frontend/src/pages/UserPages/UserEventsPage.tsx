@@ -19,6 +19,8 @@ const UserEventsPage = () => {
         }
     })
     
+    console.log(allUserJoinEventsData);
+    
 
 
 

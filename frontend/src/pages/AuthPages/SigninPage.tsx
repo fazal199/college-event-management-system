@@ -25,6 +25,8 @@ import { postData } from "@/lib/react-query/apiFunctions"
 import { successAlert } from "@/lib/sweetalert/alerts"
 import { checkForErrors } from "@/lib/utils"
 import { useInternet } from "@/contexts/InterStatusWrapper"
+import { useSelector } from "react-redux"
+import { useEffect } from "react"
 
 export default function SigninPage() {
 
@@ -34,6 +36,8 @@ export default function SigninPage() {
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const isLogin = useSelector((state: any) => state.auth?.isLogin);
+  
 
   const { isInterConnected } = useInternet();
 
@@ -81,6 +85,11 @@ export default function SigninPage() {
     }
 
   ]
+
+    useEffect(() => {
+          if(isLogin)
+              navigate("/");
+      }, [isLogin])
 
   return (
     <section className="h-screen w-screen pt-28">

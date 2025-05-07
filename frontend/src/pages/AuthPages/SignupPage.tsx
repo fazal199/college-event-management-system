@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { signUpSchemaforOrganiser, signUpSchemaforUser } from "@/lib/zod/signUpSchema"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,12 +26,16 @@ import { postData } from "@/lib/react-query/apiFunctions"
 import { successAlert } from "@/lib/sweetalert/alerts"
 import { checkForErrors } from "@/lib/utils"
 import { useInternet } from "@/contexts/InterStatusWrapper"
+import { useDispatch, useSelector } from "react-redux"
+import { setAuth } from "@/lib/redux/slices/authSlice"
 
 export default function SignupPage() {
 
 
   const [isUser, setIsUser] = useState<boolean>(true);
   const { isInterConnected } = useInternet();
+  const isLogin = useSelector((state: any) => state.auth?.isLogin);
+  const dispatch =useDispatch();
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(isUser ? signUpSchemaforUser : signUpSchemaforOrganiser)
@@ -86,6 +90,8 @@ export default function SignupPage() {
 
       if (isUser)
         navigate("/");
+        
+
 
       else {
         navigate("/manage-events/yourevents");
@@ -106,6 +112,12 @@ export default function SignupPage() {
     })
 
   }
+
+  useEffect(() => {
+
+        if(isLogin)
+            navigate("/");
+    }, [isLogin])
 
   return (
     <section className="h-screen w-screen">

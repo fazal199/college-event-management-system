@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Link } from "react-router-dom"
+import FetchUserData from "../NoUiComponents/FetchUserData"
 
 export default function HomePage() {
 
@@ -54,7 +55,7 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
 
-
+      <FetchUserData />
       <section className="flex-1">
         {/* Hero Section */}
         <div className="w-full bg-muted py-12 md:py-24 lg:py-32 xl:py-48">

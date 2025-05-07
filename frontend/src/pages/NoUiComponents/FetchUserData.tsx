@@ -18,8 +18,6 @@ const FetchUserData = () => {
             dispatch(setAuth({ isLogin: true, userData: response.data }));
         },
         onError: (error: any) => {
-
-
             checkForErrors(error?.response?.data, isInterConnected, "something went wrong while fetching user data! place:FetchUserData", error.message, false);
         },
         // to make api call only one time

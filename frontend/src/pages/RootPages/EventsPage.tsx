@@ -41,8 +41,6 @@ const EventsPage = () => {
       checkForErrors(error?.response?.data, isInterConnected, "Something went wrong while fetching all events data! place:EventsPage", error.message);
     }
   })
-
-  console.log(allEventsData);
   
 
   //for handling serach of events
