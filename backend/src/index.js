@@ -8,7 +8,7 @@ const dbConnect = require('./db/dbConnect.js');
 
 dbConnect().then((dbInstance) => {
     app.listen(PORT, () => {
-        console.log("app started on localhost:!");
+        console.log("Database connected and App Started!");
     })
 })
 

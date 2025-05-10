@@ -3,10 +3,10 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_BASE_API_URL; // Replace with your API base URL
 
 // GET request
-export const getData = async ({ endpoint }: any) => {
-  
+export const getData = async ({ endpoint, headers }: any) => {
   const { data } = await axios.get(API_BASE_URL + endpoint, {
-      withCredentials: true,
+    withCredentials: true,
+    headers,
   });
   console.log(data);
 
@@ -16,7 +16,7 @@ export const getData = async ({ endpoint }: any) => {
 // POST request
 export const postData = async ({ endpoint, payload }: any) => {
   const { data } = await axios.post(API_BASE_URL + endpoint, payload, {
-      withCredentials: true,
+    withCredentials: true,
   });
   return data;
 };
@@ -24,7 +24,7 @@ export const postData = async ({ endpoint, payload }: any) => {
 // PUT request
 export const putData = async ({ endpoint, payload }: any) => {
   const { data } = await axios.put(`${API_BASE_URL}${endpoint}`, payload, {
-      withCredentials: true,
+    withCredentials: true,
   });
   return data;
 };
@@ -32,7 +32,7 @@ export const putData = async ({ endpoint, payload }: any) => {
 // DELETE request
 export const deleteData = async ({ endpoint }: any) => {
   const { data } = await axios.delete(`${API_BASE_URL}${endpoint}`, {
-      withCredentials: true,
+    withCredentials: true,
   });
   return data;
 };

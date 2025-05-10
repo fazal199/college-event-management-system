@@ -82,11 +82,13 @@ export default function SignupPage() {
 
   const { mutate, isLoading } = useMutation({
     mutationFn: postData,
-    onSuccess: () => {
+    onSuccess: (response:any) => {
       successAlert({
         title: "SignUp Successfully!",
         text: "You have successfully signed up!",
       })
+
+      localStorage.setItem("accessToken",response.data?.accessToken)
 
       if (isUser)
         navigate("/");

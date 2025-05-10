@@ -13,7 +13,7 @@ const FetchUserData = () => {
 
     useQuery({
         queryKey: "userData",
-        queryFn: () => getData({ endpoint: "/api/auth/user" }),
+        queryFn: () => getData({ endpoint: "/api/auth/user",headers: localStorage.getItem("accessToken") ? {Authorization: `Bearer ${localStorage.getItem("accessToken")}`} : {}}),
         onSuccess: (response) => {
             dispatch(setAuth({ isLogin: true, userData: response.data }));
         },

@@ -37,17 +37,19 @@ export default function SigninPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const isLogin = useSelector((state: any) => state.auth?.isLogin);
-  
+
 
   const { isInterConnected } = useInternet();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: postData,
-    onSuccess: () => {
+    onSuccess: (response:any) => {
       successAlert({
         title: "Login Successfully!",
         text: "You have successfully LoggedIn!",
       })
+
+      localStorage.setItem("accessToken", response.data?.accessToken)
 
       queryClient.invalidateQueries("userData");
 
@@ -86,10 +88,10 @@ export default function SigninPage() {
 
   ]
 
-    useEffect(() => {
-          if(isLogin)
-              navigate("/");
-      }, [isLogin])
+  useEffect(() => {
+    if (isLogin)
+      navigate("/");
+  }, [isLogin])
 
   return (
     <section className="h-screen w-screen pt-28">
@@ -124,7 +126,7 @@ export default function SigninPage() {
                   ))
                 }
 
-              
+
                 <Button type="submit" className="w-full text-lg">
                   {
                     !isLoading ? "Login" : "Loading..."

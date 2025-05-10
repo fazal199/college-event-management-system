@@ -48,7 +48,7 @@ const userRegisterController = tryCatchBlock(async (req, res) => {
         .status(200)
 
         .json(
-            new ApiResponse(200, null, 'User Created Successfully!', 'Signup Successfully!')
+            new ApiResponse(200, {accessToken}, 'User Created Successfully!', 'Signup Successfully!')
         )
 }, "something went wrong while registering user | users.controller.js -> userRegisterController!")
 
@@ -70,7 +70,7 @@ const userLoginController = tryCatchBlock(async (req, res) => {
     res.status(200)
         .cookie('accessToken', accessToken, options)
         .json(
-            new ApiResponse(200, null, 'User Login Successfully!', 'Login Successfully!')
+            new ApiResponse(200,  {accessToken}, 'User Login Successfully!', 'Login Successfully!')
         )
 }, "something went wrong while logging in user | users.controller.js -> userLoginController!")
 

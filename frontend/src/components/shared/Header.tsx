@@ -37,7 +37,7 @@ export default function Header() {
       link: "/about",
 
     },
-  
+
     {
       text: "Manage Events",
       link: "/manage-events/profile",
@@ -61,6 +61,8 @@ export default function Header() {
         title: "Logout Successfully!",
         text: "You have successfully Loggedout!",
       })
+      localStorage.removeItem("accessToken");
+
       dispatch(makeAuthEmpty());
       navigate("/");
     },
@@ -88,30 +90,30 @@ export default function Header() {
 
                 return;
               }
-           
+
 
               else if ((isLogin && role === "user") && (item.text === "Manage Events" || item.text === "Admin")) {
                 // If a regular user is logged in, don't show "Manage Events" or "Admin"
-               
+
 
                 return;
               }
 
-           
+
               else if ((isLogin && role === "organiser") && (item.text === "Admin" || item.text === "Your Events")) {
                 // If an organiser is logged in, don't show "Admin" and "Your Events"
-               
+
                 return;
               }
 
-              
+
               else if ((isLogin && role === "admin") && (item.text === "Manage Events" || item.text === "Your Events")) {
                 // If an admin is logged in, don't show "Manage Events" and "Your Events"
-               
+
                 return;
               }
 
-              
+
               return (
                 <li key={item.link}>
                   <NavLink to={item.link} className={({ isActive }) => `transition-colors ${isActive && 'text-primary underline decoration-primary underline-offset-4 decoration-2'} hover:text-primary`} >
@@ -178,17 +180,17 @@ export default function Header() {
               Sign Up
             </Button>}
           </Link>
-          {!isLogin && 
-          <Link className="hidden md:block" to={"/auth/signin"}>
-          <Button
-            variant="outline"
-            className="rounded-md text-secondary-foreground bg-background px-4 py-2 text-sm shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            Log In
-          </Button>
-          </Link>
+          {!isLogin &&
+            <Link className="hidden md:block" to={"/auth/signin"}>
+              <Button
+                variant="outline"
+                className="rounded-md text-secondary-foreground bg-background px-4 py-2 text-sm shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                Log In
+              </Button>
+            </Link>
           }
-          {isLogin && <Button onClick={() => mutate({ endpoint: "/api/auth/logout" })}
+          {isLogin && <Button onClick={() => mutate({ endpoint: "/api/auth/logout", headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` } })}
             className=" rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             Logout
