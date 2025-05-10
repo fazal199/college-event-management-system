@@ -190,7 +190,7 @@ export default function Header() {
               </Button>
             </Link>
           }
-          {isLogin && <Button onClick={() => mutate({ endpoint: "/api/auth/logout", headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` } })}
+          {isLogin && <Button onClick={() => mutate({ endpoint: "/api/auth/logout" })}
             className=" rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             Logout

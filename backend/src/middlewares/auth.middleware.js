@@ -10,7 +10,8 @@ const authMiddleware = tryCatchBlock(async (req, res, next) => {
 
 
 
-    const token = req?.cookies?.accessToken || req.headers?.authorization?.replace("Bearer", "").trim();
+    // const token = req?.cookies?.accessToken || req.headers?.authorization?.replace("Bearer", "").trim();
+    const token = req.headers?.authorization?.replace("Bearer", "").trim();
 
 
     //if token is not given then send error
