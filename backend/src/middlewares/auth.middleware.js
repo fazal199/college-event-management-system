@@ -24,7 +24,8 @@ const authMiddleware = tryCatchBlock(async (req, res, next) => {
     try {
 
         decodedToken = jwt.verify(token, JWTCONSTANTS.SECRETKEY);
-
+      
+        
     } catch (err) {
         if (err.name === 'TokenExpiredError') {
             throw new ApiError(401, "Jwt Token has Expired!", { isTokenExpired: true }, "Your Session has Expired! Plzz Login again!")
@@ -67,7 +68,6 @@ const authMiddleware = tryCatchBlock(async (req, res, next) => {
 
     //perform join here to get the user role
     // console.log(user);
-
     req.user = user[0];
 
     next();

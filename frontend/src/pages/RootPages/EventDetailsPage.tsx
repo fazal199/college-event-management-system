@@ -70,7 +70,10 @@ const EventDetails = () => {
                         ticketprice: eventData?.data?.ticketprice,
                         amount: order.amount,
                     }, {
-                        withCredentials: true
+                        withCredentials: true,
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                        }
                     });
 
                     if (verifyRes.data.success) {

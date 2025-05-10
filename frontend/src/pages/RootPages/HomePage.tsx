@@ -54,8 +54,7 @@ export default function HomePage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-
-      <FetchUserData />
+      <FetchUserData/>
       <section className="flex-1">
         {/* Hero Section */}
         <div className="w-full bg-muted py-12 md:py-24 lg:py-32 xl:py-48">
