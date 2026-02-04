@@ -11,3 +11,8 @@ languagesRouter.delete("/delete/:languageId", deleteLanguage);
 module.exports = {
     languagesRouter
 }
+
+/* 
+ /api/languages => get => post => 
+ /api/languages/1 => delete => put
+ */

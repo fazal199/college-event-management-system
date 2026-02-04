@@ -48,9 +48,6 @@ export default function SigninPage() {
         title: "Login Successfully!",
         text: "You have successfully LoggedIn!",
       })
-
-      console.log(response.data.accessToken);
-    
       // localStorage.setItem("accessToken", response.data?.accessToken)
       localStorage.setItem("accessToken", response.data?.accessToken)
 

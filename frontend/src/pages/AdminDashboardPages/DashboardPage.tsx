@@ -33,8 +33,6 @@ const DashboardPage = () => {
     }
   });
 
-  
-
   const state:any = {
 
     series: [{

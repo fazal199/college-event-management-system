@@ -2,7 +2,6 @@ import { useInternet } from '@/contexts/InterStatusWrapper';
 import { getData } from '@/lib/react-query/apiFunctions';
 import { setAuth } from '@/lib/redux/slices/authSlice';
 import { checkForErrors } from '@/lib/utils';
-import { get } from 'http';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -50,8 +50,6 @@ const ManageUsersPage = () => {
     return false;
   }
 
-  console.log(allUsersData);
-  
   const changePermission = (permission: boolean, userId: any) => {
     confirmAlert({
       confirmFunction: handleChangePermission, qtitle: "Are you Sure?", qtext: "Do you really want to change permission?", iconType: "warning", qconfirmtext: "Yes!", id: userId, data: permission, stitle: "Permission Changed!", stext: "Permission Has been Changed!"

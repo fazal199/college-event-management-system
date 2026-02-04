@@ -117,7 +117,7 @@ const updateEventController = tryCatchBlock(async (req, res) => {
         address,
         capacity: Number(capacity),
         ticketprice: Number(ticketprice),
-        isfree: ticketprice == "0" ? true : false,
+        isFree: ticketprice == "0" ? true : false,
         categoryid: new mongoose.Types.ObjectId(category),
         languageid: new mongoose.Types.ObjectId(language),
         organiserId: new mongoose.Types.ObjectId(req.user._id),
@@ -1085,14 +1085,15 @@ const cancelUserRegistrationController = tryCatchBlock(async (req, res) => {
     userId = new mongoose.Types.ObjectId(userId);
     eventId = new mongoose.Types.ObjectId(eventId);
 
+
     //if the event is not free, then refund
     if (!isfree) {
         const transaction = await TransactionModel.findOne({
             userId,
             eventId
         })
-
-
+       
+        
         await refundPayment(transaction.razorPayPaymentId, transaction.amount)
     }
 

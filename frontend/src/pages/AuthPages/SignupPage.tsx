@@ -27,7 +27,6 @@ import { successAlert } from "@/lib/sweetalert/alerts"
 import { checkForErrors } from "@/lib/utils"
 import { useInternet } from "@/contexts/InterStatusWrapper"
 import { useDispatch, useSelector } from "react-redux"
-import { setAuth } from "@/lib/redux/slices/authSlice"
 
 export default function SignupPage() {
 
@@ -35,7 +34,6 @@ export default function SignupPage() {
   const [isUser, setIsUser] = useState<boolean>(true);
   const { isInterConnected } = useInternet();
   const isLogin = useSelector((state: any) => state.auth?.isLogin);
-  const dispatch =useDispatch();
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(isUser ? signUpSchemaforUser : signUpSchemaforOrganiser)
@@ -122,7 +120,7 @@ export default function SignupPage() {
     }, [isLogin])
 
   return (
-    <section className="h-screen w-screen">
+    <section className=" w-screen">
       <Card className="px-8 py-4 max-w-md mx-auto shadow-xl mt-10 h-auto">
         <CardHeader>
           <CardTitle className="text-2xl text-center mb-2">Sign Up</CardTitle>

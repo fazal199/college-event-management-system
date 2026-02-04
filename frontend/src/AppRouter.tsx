@@ -4,7 +4,7 @@ import RootLayout from "./Layouts/RootLayout";
 import SigninPage from "./pages/AuthPages/SigninPage.tsx";
 import SignupPage from "./pages/AuthPages/SignupPage.tsx";
 import NotFound from "./components/shared/NotFound.tsx"
-import OrganiserDashboard from "./Layouts/OrganiserLayout.tsx.tsx";
+import OrganiserLayout from "./Layouts/OrganiserLayout.tsx.tsx";
 import OrgEvents from "./pages/OrganiserDashboard/OrgEventsPage.tsx";
 import OrganiserProfile from "./pages/OrganiserDashboard/OrganiserProfilePage.tsx";
 import CreateEvents from "./pages/OrganiserDashboard/CreateEventPage.tsx";
@@ -43,7 +43,7 @@ const router = createBrowserRouter(
                 <Route path="auth/signin" element={<SigninPage />} />
                 <Route path="auth/signup" element={<SignupPage />} />
 
-                <Route path="manage-events/" element={<OrganiserDashboard />}>
+                <Route path="manage-events/" element={<OrganiserLayout />}>
                     <Route path="yourevents" element={<OrgEvents />} />
                     <Route path="profile" element={<OrganiserProfile />} />
                     <Route path="createevents" element={<CreateEvents />} />

@@ -22,7 +22,6 @@ const EventTicketPage = () => {
       }
   })
 
-  console.log(ticketData);
   
   
     

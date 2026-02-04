@@ -12,14 +12,13 @@ const path = require('path');
 app.use(cors({
     origin: `${process.env.FRONTEND_URL}`,
     "methods": "GET,PUT,PATCH,POST,DELETE",
-    //to allow the server to set and receive cookies in the browser (for authentication)
     credentials: true,
+    //to allow the server to set and receive cookies in the browser (for authentication)
 }))
 
 //[security practices]
 //limit the json size
 app.use(express.json({ limit: "20kb" }))
-
 
 
 //to decode the url (sometimes spaces treated as %20 or +)

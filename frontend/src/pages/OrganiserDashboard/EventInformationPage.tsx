@@ -11,8 +11,6 @@ import EditEventComponent from './EditEventComponents'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { successAlert } from '@/lib/sweetalert/alerts'
-import { log } from 'console'
-import { set } from 'zod'
 
 const EventInformationPage = () => {
 

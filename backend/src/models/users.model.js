@@ -45,3 +45,4 @@ UserSchema.methods.generateAcessToken = function () {
 
 const UsersModel = mongoose.model('User', UserSchema);
 module.exports = UsersModel;
+// everyone like their own

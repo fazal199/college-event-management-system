@@ -18,11 +18,6 @@ const UserEventsPage = () => {
         }
     })
     
-    console.log(allUserJoinEventsData);
-    
-
-
-
 
     return (
         <section>

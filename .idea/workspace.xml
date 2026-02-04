@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fe8a8624-c0f3-47f6-847e-738f1a22bc51" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/backend/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/controllers/events.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/events.controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/lib/utils/utilityfunctions.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/lib/utils/utilityfunctions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/models/users.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/models/users.model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/languages.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/languages.route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/users.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/users.route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/debugalready.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/AppRouter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/AppRouter.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/shared/DataTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/shared/DataTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/AdminDashboardPages/DashboardPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/AdminDashboardPages/DashboardPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/AuthPages/SignupPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/AuthPages/SignupPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/NoUiComponents/FetchUserData.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/NoUiComponents/FetchUserData.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/OrganiserDashboard/EditEventComponents.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/OrganiserDashboard/EditEventComponents.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/OrganiserDashboard/EventInformationPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/OrganiserDashboard/EventInformationPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/OrganiserDashboard/OrganiserProfilePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/OrganiserDashboard/OrganiserProfilePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/UserPages/EventTicketPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/UserPages/EventTicketPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/UserPages/UserEventsPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/UserPages/UserEventsPage.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="30J8YgEk2X15qi4Sgis0RSCMU7t" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fe8a8624-c0f3-47f6-847e-738f1a22bc51" name="Changes" comment="" />
+      <created>1753334367776</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1753334367776</updated>
+    </task>
+    <servers />
+  </component>
+</project>

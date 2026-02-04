@@ -103,7 +103,6 @@ const OrganiserProfilePage = () => {
   return (
     <div>
       <h1 className='my-6 text-4xl font-semibold text-center'>Hello, {organiserData?.data?.data?.username}👋</h1>
-
       <div className=' grid grid-cols-[minmax(20rem,0.7fr)_auto]'>
         <div>
           <Card className="h-auto max-w-md mx-auto px-4  shadow-xl my-7">

@@ -148,6 +148,8 @@ export default function EditEventPage() {
         formData.append("category", values.category);
         formData.append("language", values.language);
 
+        console.log(values);
+        
         // Append the file to formData
         if (values.eventthumbnail) {
             formData.append("eventthumbnail", values.eventthumbnail); // Append the file to FormData

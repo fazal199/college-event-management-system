@@ -199,7 +199,7 @@ export function DataTable({
                       if (!permissionAllowedFunction)
                         return;
 
-                      console.log(row.original);
+                    
 
 
                       permissionAllowedFunction(row.original?._id,row.original?.eventId || null);
